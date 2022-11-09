@@ -22,9 +22,9 @@ jobs:
     - name: See Dir
       run: ls ${{github.workspace}}
     - name: Unzip Library opencv
-      run: tar -czvf ${{github.workspace}}/3rdparty/resource/staticlib_opencv.7z ${{github.workspace}}/3rdparty/staticlib/
+      run: tar -xzvf ${{github.workspace}}/3rdparty/resource/staticlib_opencv.7z ${{github.workspace}}/3rdparty/staticlib/
     - name: Unzip Library onnxruntime
-      run: tar -czvf ${{github.workspace}}/3rdparty/resource/staticlib_onnxruntime.7z ${{github.workspace}}/3rdparty/staticlib/
+      run: tar -xzvf ${{github.workspace}}/3rdparty/resource/staticlib_onnxruntime.7z ${{github.workspace}}/3rdparty/staticlib/
       
     - name: See Dir opencv
       run: ls ${{github.workspace}}/3rdparty/staticlib/opencv
@@ -39,7 +39,7 @@ jobs:
 
     - name: Build
       # Build your program with the given configuration
-      run: msbuild libocr.sln /p:Configuration=${{env.BUILD_TYPE}}
+      run: msbuild build/libocr.sln /p:Configuration=${{env.BUILD_TYPE}}
 
     - name: Test
       working-directory: ${{github.workspace}}/build
