@@ -1,6 +1,8 @@
 # libocr cpp
 a simple c++ library for ocr
 
+[![CMake](https://github.com/GengGode/libocr/actions/workflows/cmake.yml/badge.svg)](https://github.com/GengGode/libocr/actions/workflows/cmake.yml)
+
 [中文](https://github.com/GengGode/libocr/blob/main/README_CH.md) | English
 
 ## Profile : Why I write this library
