@@ -22,7 +22,7 @@ jobs:
     - name: See Dir
       run: ls ${{github.workspace}}
     - name: Unzip Library opencv
-      run: tar -xzvf ${{github.workspace}}/3rdparty/resource/staticlib_opencv.7z ${{github.workspace}}/3rdparty/staticlib/
+      run: .\7z.exe x -y -o${{github.workspace}}/3rdparty/staticlib/ ${{github.workspace}}/3rdparty/resource/staticlib_opencv.7z  
     - name: Unzip Library onnxruntime
       run: tar -xzvf ${{github.workspace}}/3rdparty/resource/staticlib_onnxruntime.7z ${{github.workspace}}/3rdparty/staticlib/
       
