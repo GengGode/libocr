@@ -20,7 +20,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Unzip Library
-      run: ${{github.workspace}}/3rdparty/resource/unzip_library.ps1
+      run: dir && ${{github.workspace}}/3rdparty/resource/unzip_library.ps1
     - name: See Dir
       run: dir ${{github.workspace}}/3rdparty/
 
