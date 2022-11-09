@@ -21,11 +21,17 @@ jobs:
     - uses: actions/checkout@v3
     - name: See Dir
       run: ls ${{github.workspace}}
-    - name: Unzip Library
+    - name: Unzip Library opencv
       run: tar -czvf ${{github.workspace}}/3rdparty/resource/staticlib_opencv.7z ${{github.workspace}}/3rdparty/staticlib/
-    - name: See Dir
-      run: ls ${{github.workspace}}/3rdparty/staticlib/
+    - name: Unzip Library onnxruntime
+      run: tar -czvf ${{github.workspace}}/3rdparty/resource/staticlib_onnxruntime.7z ${{github.workspace}}/3rdparty/staticlib/
+      
+    - name: See Dir opencv
+      run: ls ${{github.workspace}}/3rdparty/staticlib/opencv
 
+    - name: See Dir onnxruntime
+      run: ls ${{github.workspace}}/3rdparty/staticlib/onnxruntime
+      
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
