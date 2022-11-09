@@ -1,6 +1,8 @@
 # libocr cpp
 用于 ocr 的简单 c++ 库
 
+[![CMake](https://github.com/GengGode/libocr/actions/workflows/cmake.yml/badge.svg)](https://github.com/GengGode/libocr/actions/workflows/cmake.yml)
+
 中文 | [English](https://github.com/GengGode/libocr/blob/main/README.md)
 
 ## 简介：我为什么写这个库
