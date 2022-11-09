@@ -53,7 +53,15 @@ namespace libocr::utils
     inline res_data_ptr from_resource_load_onnx(int idr)
     {
         // Initialize session from Resource idr
+#ifdef _LIB
         auto h_module = GetModuleHandle(NULL);
+#else
+#ifdef _UNICODE
+        auto h_module = GetModuleHandle(L"libocr.dll");
+#else
+        auto h_module = GetModuleHandle("libocr.dll");
+#endif
+#endif
 #ifdef _UNICODE
         HRSRC h_res = FindResource(h_module, MAKEINTRESOURCE(idr), L"Onnx");
 #else
@@ -71,7 +79,15 @@ namespace libocr::utils
     inline res_data_ptr from_resource_load_txt(int idr)
     {
         // Initialize txt from Resource idr
+#ifdef _LIB
         auto h_module = GetModuleHandle(NULL);
+#else
+#ifdef _UNICODE
+        auto h_module = GetModuleHandle(L"libocr.dll");
+#else
+        auto h_module = GetModuleHandle("libocr.dll");
+#endif
+#endif
 #ifdef _UNICODE
         HRSRC h_res = FindResource(h_module, MAKEINTRESOURCE(idr), L"Txt");
 #else
