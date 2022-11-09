@@ -17,7 +17,7 @@ set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Release>:>")
 if (WIN32)
     message(STATUS "Release MT mode")
     set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT")
-    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MTd")
+    #set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MTd")
 endif()
 
 # 设置 添加resource.rc资源
@@ -49,6 +49,7 @@ SET( EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 # find_package (opencv)
 #设定头文件目录
 INCLUDE_DIRECTORIES( ${PROJECT_SOURCE_DIR}/include)
+INCLUDE_DIRECTORIES( ${PROJECT_SOURCE_DIR}/src)
 
 # 添加第三方库头文件目录 3rdparty/include
 # INCLUDE_DIRECTORIES( ${PROJECT_SOURCE_DIR}/3rdparty/include)
@@ -61,16 +62,23 @@ LINK_DIRECTORIES( ${PROJECT_SOURCE_DIR}/3rdparty/staticlib/opencv/)
 LINK_DIRECTORIES( ${PROJECT_SOURCE_DIR}/3rdparty/staticlib/onnxruntime)
 LINK_DIRECTORIES( ${PROJECT_SOURCE_DIR}/3rdparty/staticlib/onnxruntime-external)
 
-# 添加rc资源文件
-SET(RESOURCES ${PROJECT_SOURCE_DIR}/resource/resource_model.rc)
-
 # 添加src目录下所有cpp文件
 AUX_SOURCE_DIRECTORY( ${PROJECT_SOURCE_DIR}/src/ libocr.cpp)
 AUX_SOURCE_DIRECTORY( ${PROJECT_SOURCE_DIR}/src/ocr/ ocr.cpp)
-AUX_SOURCE_DIRECTORY( ${PROJECT_SOURCE_DIR}/src/onnx/ onnx.cpp)
-AUX_SOURCE_DIRECTORY( ${PROJECT_SOURCE_DIR}/src/onnx/text_recognizer/ text_recognizer.cpp)
+AUX_SOURCE_DIRECTORY( ${PROJECT_SOURCE_DIR}/src/ocr_manager/ ocr_manager)
+AUX_SOURCE_DIRECTORY( ${PROJECT_SOURCE_DIR}/src/onnx/ onnx)
+AUX_SOURCE_DIRECTORY( ${PROJECT_SOURCE_DIR}/src/onnx/text_recognizer/ text_recognizer)
 AUX_SOURCE_DIRECTORY( ${PROJECT_SOURCE_DIR}/src/resource resource.h)
 AUX_SOURCE_DIRECTORY( ${PROJECT_SOURCE_DIR}/src/utils utils.h)
 
 
-add_library(libocr SHARED ${VERSIONINFO_RC} ${RESOURCE_RC} ${PROJECT_SOURCE_DIR}/include/libocr.h ${PROJECT_SOURCE_DIR}/src/libocr.cpp)
+add_library(libocr SHARED ${VERSIONINFO_RC} ${RESOURCE_RC}
+        include/libocr.h
+        src/libocr.cpp
+        src/ocr/ocr.cpp
+        src/ocr_manager/ocr_manager.cpp
+        src/onnx/onnx.h
+        src/onnx/text_recognizer/text_recognizer.cpp
+        src/resource/resource.h
+        src/utils/utils.h
+        )

@@ -13,8 +13,8 @@ namespace libocr::onnx
     class onnx
     {
     public:
-        onnx();
-        ~onnx();
+        onnx(){};
+        ~onnx(){};
         virtual void run(cv::Mat& input_image) = 0;
     public:
         Ort::Session* session = nullptr;
