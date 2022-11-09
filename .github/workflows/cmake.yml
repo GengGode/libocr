@@ -22,9 +22,9 @@ jobs:
     - name: See Dir
       run: ls ${{github.workspace}}
     - name: Unzip Library
-      run: tar -czvf ${{github.workspace}}/3rdparty/resource/*.7z ${{github.workspace}}/3rdparty/
+      run: tar -czvf ${{github.workspace}}/3rdparty/resource/staticlib_opencv.7z ${{github.workspace}}/3rdparty/staticlib/
     - name: See Dir
-      run: ls ${{github.workspace}}/3rdparty/
+      run: ls ${{github.workspace}}/3rdparty/staticlib/
 
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
