@@ -1,7 +1,7 @@
 #libocr cpp
 用于 ocr 的简单 c++ 库
 
-[中文]() | English
+中文 | [English](https://github.com/GengGode/libocr/blob/main/README.md)
 
 ## 简介：我为什么写这个库
 
