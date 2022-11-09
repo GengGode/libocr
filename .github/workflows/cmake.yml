@@ -41,7 +41,7 @@ jobs:
       
     - name: Build
       # Build your program with the given configuration
-      run: msbuild /m /p:Configuration=${{env.BUILD_TYPE}}
+      run: msbuild ${{github.workspace}}/build/libocr.sln /m /p:Configuration=${{env.BUILD_TYPE}}
 
     - name: Test
       working-directory: ${{github.workspace}}/build
