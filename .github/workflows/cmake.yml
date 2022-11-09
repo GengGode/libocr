@@ -22,15 +22,12 @@ jobs:
     - name: See Dir
       run: ls ${{github.workspace}}
     - name: Unzip Library opencv
-      run: 7z x -y -o${{github.workspace}}/3rdparty/staticlib/ ${{github.workspace}}/3rdparty/resource/staticlib_opencv.7z  
+      run: 7z x -y -o${{github.workspace}}/3rdparty/ ${{github.workspace}}/3rdparty/resource/staticlib_opencv.7z  
     - name: Unzip Library onnxruntime
-      run:  7z x -y -o${{github.workspace}}/3rdparty/staticlib/ ${{github.workspace}}/3rdparty/resource/staticlib_onnxruntime.7z 
+      run:  7z x -y -o${{github.workspace}}/3rdparty/ ${{github.workspace}}/3rdparty/resource/staticlib_onnxruntime.7z 
       
     - name: See Dir opencv
-      run: ls ${{github.workspace}}/3rdparty/staticlib/opencv
-
-    - name: See Dir onnxruntime
-      run: ls ${{github.workspace}}/3rdparty/staticlib/onnxruntime
+      run: ls ${{github.workspace}}/3rdparty/
       
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
@@ -39,7 +36,7 @@ jobs:
 
     - name: Build
       # Build your program with the given configuration
-      run: msbuild build/libocr.sln /p:Configuration=${{env.BUILD_TYPE}}
+      run: msbuild ${{github.workspace}}/build/libocr.sln /p:Configuration=${{env.BUILD_TYPE}}
 
     - name: Test
       working-directory: ${{github.workspace}}/build
