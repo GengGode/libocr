@@ -1,4 +1,4 @@
-#libocr cpp
+# libocr cpp
 用于 ocr 的简单 c++ 库
 
 中文 | [English](https://github.com/GengGode/libocr/blob/main/README.md)
