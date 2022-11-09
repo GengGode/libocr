@@ -1,6 +1,6 @@
 // Microsoft Visual C++ generated resource script.
 //
-#include "resource.h"
+#include "../src/resource/resource.h"
 
 #define APSTUDIO_READONLY_SYMBOLS
 /////////////////////////////////////////////////////////////////////////////
@@ -50,7 +50,7 @@ END
 // Onnx
 //
 
-IDR_ONNX_CHT            Onnx                    "resource/chinese_cht_PP.onnx"
+IDR_ONNX_CHT            Onnx                    "chinese_cht_PP.onnx"
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -58,7 +58,7 @@ IDR_ONNX_CHT            Onnx                    "resource/chinese_cht_PP.onnx"
 // Txt
 //
 
-IDR_TXT_CHT_DICT        Txt                     "resource/chinese_cht_dict.txt"
+IDR_TXT_CHT_DICT        Txt                     "chinese_cht_dict.txt"
 
 #endif    // 中文(简体，中国) resources
 /////////////////////////////////////////////////////////////////////////////
