@@ -66,7 +66,7 @@ cd ../..
 mkdir build
 cd build
 cmake ..
-cmake --build --config Release
+MSBuild libocr.sln /p:Configuration=Release
 ```
 
 ## 自定义：自定义您的模型

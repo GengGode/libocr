@@ -65,7 +65,7 @@ cd ../..
 mkdir build
 cd build
 cmake ..
-cmake --build --config Release
+MSBuild libocr.sln /p:Configuration=Release
 ```
 
 ## Customize : Customize your model
