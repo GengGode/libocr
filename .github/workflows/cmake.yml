@@ -18,6 +18,10 @@ jobs:
     runs-on: windows-latest
 
     steps:
+    
+    - name: Add MSBuild to PATH
+      uses: microsoft/setup-msbuild@v1.0.2
+      
     - uses: actions/checkout@v3
     - name: See Dir
       run: ls ${{github.workspace}}
@@ -34,9 +38,10 @@ jobs:
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
       run: mkdir build && cd build && cmake ..
 
+      
     - name: Build
       # Build your program with the given configuration
-      run: .\msbuild ${{github.workspace}}/build/libocr.sln /p:Configuration=${{env.BUILD_TYPE}}
+      run: msbuild /m /p:Configuration=${{env.BUILD_TYPE}}
 
     - name: Test
       working-directory: ${{github.workspace}}/build
