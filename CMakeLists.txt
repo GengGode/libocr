@@ -36,17 +36,9 @@ if(MSVC)
     configure_file("${CMAKE_SOURCE_DIR}/resource/resource.rc.in" "${VERSIONINFO_RC}")
 endif()
 
-# 设置编译选项
 #设定可执行二进制文件的目录
 SET( EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 
-#设定存放编译出来的库文件的目录
-# SET( LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib/)
-
-#并且把该目录设为连接目录
-# LINK_DIRECTORIES( ${PROJECT_SOURCE_DIR}/lib)
-
-# find_package (opencv)
 #设定头文件目录
 INCLUDE_DIRECTORIES( ${PROJECT_SOURCE_DIR}/include)
 INCLUDE_DIRECTORIES( ${PROJECT_SOURCE_DIR}/src)
@@ -62,19 +54,18 @@ LINK_DIRECTORIES( ${PROJECT_SOURCE_DIR}/3rdparty/staticlib/opencv/)
 LINK_DIRECTORIES( ${PROJECT_SOURCE_DIR}/3rdparty/staticlib/onnxruntime)
 LINK_DIRECTORIES( ${PROJECT_SOURCE_DIR}/3rdparty/staticlib/onnxruntime-external)
 
-# 添加src目录下所有cpp文件
-AUX_SOURCE_DIRECTORY( ${PROJECT_SOURCE_DIR}/src/ libocr.cpp)
-AUX_SOURCE_DIRECTORY( ${PROJECT_SOURCE_DIR}/src/ocr/ ocr.cpp)
-AUX_SOURCE_DIRECTORY( ${PROJECT_SOURCE_DIR}/src/ocr_manager/ ocr_manager)
-AUX_SOURCE_DIRECTORY( ${PROJECT_SOURCE_DIR}/src/onnx/ onnx)
-AUX_SOURCE_DIRECTORY( ${PROJECT_SOURCE_DIR}/src/onnx/text_recognizer/ text_recognizer)
-AUX_SOURCE_DIRECTORY( ${PROJECT_SOURCE_DIR}/src/resource resource.h)
-AUX_SOURCE_DIRECTORY( ${PROJECT_SOURCE_DIR}/src/utils utils.h)
+## 添加src目录下所有cpp文件
+#AUX_SOURCE_DIRECTORY( ${PROJECT_SOURCE_DIR}/src/ libocr.cpp)
+#AUX_SOURCE_DIRECTORY( ${PROJECT_SOURCE_DIR}/src/ocr/ ocr.cpp)
+#AUX_SOURCE_DIRECTORY( ${PROJECT_SOURCE_DIR}/src/ocr_manager/ ocr_manager)
+#AUX_SOURCE_DIRECTORY( ${PROJECT_SOURCE_DIR}/src/onnx/ onnx)
+#AUX_SOURCE_DIRECTORY( ${PROJECT_SOURCE_DIR}/src/onnx/text_recognizer/ text_recognizer)
+#AUX_SOURCE_DIRECTORY( ${PROJECT_SOURCE_DIR}/src/resource resource.h)
+#AUX_SOURCE_DIRECTORY( ${PROJECT_SOURCE_DIR}/src/utils utils.h)
 
 
 add_library(libocr SHARED ${VERSIONINFO_RC} ${RESOURCE_RC}
-        include/libocr.h
-        src/libocr.cpp
+        ${PROJECT_SOURCE_DIR}/include/libocr.h ${PROJECT_SOURCE_DIR}/src/libocr.cpp
         src/ocr/ocr.cpp
         src/ocr_manager/ocr_manager.cpp
         src/onnx/onnx.h
