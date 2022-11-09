@@ -1,7 +1,7 @@
 # libocr cpp
 a simple c++ library for ocr
 
-[中文]() | English
+[中文](https://github.com/GengGode/libocr/blob/main/README_CH.md) | English
 
 ## Profile : Why I write this library
 
