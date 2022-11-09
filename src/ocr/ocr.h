@@ -15,21 +15,9 @@ namespace libocr
     //    //int recognize_file(const char *image_file, char *result, int result_size);
     //};
     
-    //int recognize(int image_width, int image_height, const char *image_data, int image_data_size, char *result, int result_size);
-    //int recognize(const char *image_data, int image_data_size, char *result, int result_size);
-    //int recognize(const char *image_file, char *result, int result_size);
-    inline int recognize(int image_width, int image_height, const char *image_data, int image_data_size, char *result, int result_size)
-    {
-        return 0;
-    }
-    inline int recognize(const char *image_data, int image_data_size, char *result, int result_size)
-    {
-        return 0;
-    }
-    inline int recognize(const char *image_file, char *result, int result_size)
-    {
-        return 0;
-    }
+    inline int recognize(int image_width, int image_height, const char *image_data, int image_data_size, char *result, int result_size);
+    inline int recognize(const char *image_data, int image_data_size, char *result, int result_size);
+    inline int recognize(const char *image_file, char *result, int result_size);
 }
 
 #endif //LIBOCR_OCR_H
