@@ -22,7 +22,7 @@ jobs:
     - name: See Dir
       run: ls ${{github.workspace}}
     - name: Unzip Library
-      run: bash ./3rdparty/resource/unzip_library.sh
+      run: tar -czvf ${{github.workspace}}/3rdparty/resource/*.7z ${{github.workspace}}/3rdparty/
     - name: See Dir
       run: ls ${{github.workspace}}/3rdparty/
 
