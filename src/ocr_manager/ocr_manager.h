@@ -8,9 +8,10 @@
 #include "../onnx/text_recognizer/text_recognizer.h"
 namespace libocr
 {
+    //class onnx::text_recognizer;
     class ocr_manager
     {
-        onnx::text_recognizer rec;
+        onnx::text_recognizer text_rec;
         ocr_manager();
     public:
         static ocr_manager& get_instance();
