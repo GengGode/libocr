@@ -14,7 +14,6 @@ libocr::ocr_manager &libocr::ocr_manager::get_instance() {
 }
 
 std::string libocr::ocr_manager::recognize(cv::Mat &image) {
-    return text_recognizer::ocr_run(text_recognizer_, image);
     return std::string();
 }
 
