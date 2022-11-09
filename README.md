@@ -7,7 +7,7 @@ a simple c++ library for ocr
 
 > I often have some small ideas. They need an OCR function.
 > 
-> But i don't want to use python or java libraries because they are not easy to integrate.
+> But I don't want to use python or java libraries because they are not easy to integrate.
 > Moreover, some WebApi cannot be used. On the one hand, they cannot be used offline, and on the other hand, they are generally charged.
 > And I don't want to use some large libraries, such as PaddleOCR and Tesseract, because it is too inconvenient to use. Generally, models need to be loaded.
 > 
