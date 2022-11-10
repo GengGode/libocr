@@ -18,7 +18,9 @@ libocr::onnx::text_recognizer::text_recognizer()
         std::istringstream in(dict_string);
         if (in) {
             std::string line;
-            while (getline(in, line)) {// line中不包括每行的换行符
+            while (getline(in, line)) {
+                // 剔除 /r
+                line.erase(std::remove(line.begin(), line.end(), '\r'), line.end());
                 keys.push_back(line);
             }
         }
@@ -141,7 +143,6 @@ void libocr::onnx::text_recognizer::from_output_tensor(Ort::Value &output_tensor
     {
         auto& index = v.first;
         auto& value = v.second;
-        //std::cout << index << " , " << value << "\n";
         if (index > 0 && index < keys.size() + 1 && value > 0.5)
         {
             auto id = index - 1;
