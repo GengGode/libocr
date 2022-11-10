@@ -39,7 +39,7 @@ int main() {
     std::string text;
     //=========================================================================
     {
-        char *result = libocr::ocr_rec(image_path.c_str(), image_path.size());
+        char *result = libocr::ocr_file(image_path.c_str(), image_path.size());
         text = std::string(result);
         libocr::free_char(result);
     }
