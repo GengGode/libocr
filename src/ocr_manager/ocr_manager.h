@@ -5,16 +5,21 @@
 #ifndef LIBOCR_OCR_MANAGER_H
 #define LIBOCR_OCR_MANAGER_H
 
-#include "../onnx/text_recognizer/text_recognizer.h"
+#include "utils/include.h"
 namespace libocr
 {
-    //class onnx::text_recognizer;
+    namespace onnx {
+        class text_recognizer;
+    }
+    
     class ocr_manager
     {
-        onnx::text_recognizer text_rec;
+        onnx::text_recognizer* text_rec;
         ocr_manager();
     public:
         static ocr_manager& get_instance();
+        ~ocr_manager();
+    
         std::string recognize(cv::Mat& image);
         
         int recognize(int image_width, int image_height, const char *image_data, int image_data_size, char *result, int result_size);
