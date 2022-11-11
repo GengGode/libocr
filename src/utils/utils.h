@@ -45,6 +45,24 @@ namespace libocr::utils
             return output_name;
         }
     }
+    inline std::vector<int64_t> get_input_shape(Ort::Session* session)
+    {
+        size_t num_input_nodes = session->GetInputCount();
+        if (num_input_nodes == 0)
+        {
+            throw std::runtime_error("This model does not have 1 input node.");
+        }
+        else
+        {
+            Ort::AllocatorWithDefaultOptions allocator;
+            {
+                auto input_node_info = session->GetInputTypeInfo(0);
+                auto tensor_info = input_node_info.GetTensorTypeAndShapeInfo();
+                auto input_shape = tensor_info.GetShape();
+                return input_shape;
+            }
+        }
+    }
     struct res_data_ptr
     {
         const void* data;
