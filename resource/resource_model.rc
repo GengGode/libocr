@@ -50,7 +50,7 @@ END
 // Onnx
 //
 
-IDR_ONNX_CHT            Onnx                    "chinese_cht_PP.onnx"
+IDR_ONNX_CHT            Onnx                    "model.onnx"
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -58,7 +58,7 @@ IDR_ONNX_CHT            Onnx                    "chinese_cht_PP.onnx"
 // Txt
 //
 
-IDR_TXT_CHT_DICT        Txt                     "chinese_cht_dict.txt"
+IDR_TXT_CHT_DICT        Txt                     "dict.txt"
 
 #endif    // 中文(简体，中国) resources
 /////////////////////////////////////////////////////////////////////////////
