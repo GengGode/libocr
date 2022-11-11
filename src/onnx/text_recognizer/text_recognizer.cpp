@@ -48,6 +48,8 @@ void libocr::onnx::text_recognizer::init_model()
     // get input/output name
     get_input_name();
     get_output_name();
+    // get input/output shape
+    model_input_img_height = static_cast<int>(get_input_shape()[2]);
 }
 
 void libocr::onnx::text_recognizer::run(cv::Mat &input_image)
@@ -121,12 +123,12 @@ void libocr::onnx::text_recognizer::from_output_tensor(Ort::Value &output_tensor
     {
         v = exp(v);
     }
-    
-    // shape : 1, n, 8423
+    int output_shape_2 = static_cast<int>(output_shape[2]);
+    // shape : 1, n, ?
     std::vector<std::vector<float>> output_data_2d;
-    for (int i = 0; i < output_data.size(); i += 8423)
+    for (int i = 0; i < output_data.size(); i += output_shape_2)
     {
-        std::vector<float> output_data_1d(output_data.begin() + i, output_data.begin() + i + 8423);
+        std::vector<float> output_data_1d(output_data.begin() + i, output_data.begin() + i + output_shape_2);
         output_data_2d.push_back(output_data_1d);
     }
     // get max index, value

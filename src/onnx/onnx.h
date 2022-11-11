@@ -36,6 +36,10 @@ namespace libocr::onnx
             output_name = new char[output_name_t.size() + 1];
             strcpy_s(output_name, output_name_t.size() + 1, output_name_t.c_str());
         }
+        std::vector<int64_t> get_input_shape()
+        {
+            return utils::get_input_shape(session);
+        }
     };
 }
 
