@@ -139,18 +139,20 @@ void libocr::onnx::text_recognizer::from_output_tensor(Ort::Value &output_tensor
         auto max_value = *std::max_element(v.begin(), v.end());
         max_index_value.push_back(std::make_pair(max_index, max_value));
     }
-    // from keys to text
-    std::string text;
-    for (auto& v : max_index_value)
+    
+    auto& result = output_data_2d;
+    std::string ans = "";
+    std::string last_word = "";
+    for (auto& v : result)
     {
-        auto& index = v.first;
-        auto& value = v.second;
-        if (index > 0 && index < keys.size() + 1 && value > 0.5)
+        auto max_index = static_cast<int>(std::max_element(v.begin(), v.end()) - v.begin());
+        //auto max_value = *std::max_element(v.begin(), v.end());
+        auto word = get_keys_char(max_index-1);
+        if (word != last_word && word != keys.back())
         {
-            auto id = index - 1;
-            text += keys[id];
+            ans += word;
         }
+        last_word = word;
     }
-    // set text
-    text_result = text;
+    text_result = ans;
 }
