@@ -42,7 +42,9 @@ int libocr::ocr_manager::recognize(int image_width, int image_height, const char
 }
 
 int libocr::ocr_manager::recognize(const char *image_data, int image_data_size, char *result, int result_size) {
-    cv::Mat image = cv::imdecode(cv::Mat(1, image_data_size, CV_8UC3, (void *) image_data), cv::IMREAD_COLOR);
+    auto image_array = cv::Mat(1, image_data_size, CV_8UC1, (void *) image_data);
+    cv::Mat image = cv::imdecode(image_array, cv::IMREAD_COLOR);
+
     if (image.empty()){
         return -1;
     }
