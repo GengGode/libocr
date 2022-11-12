@@ -54,17 +54,22 @@ void libocr::onnx::text_recognizer::init_model()
 
 void libocr::onnx::text_recognizer::run(cv::Mat &input_image)
 {
-    auto input_tensor = to_input_tensor(input_image);
+    Ort::Value input_tensor = to_input_tensor(input_image);
+    
     assert(input_tensor.IsTensor());
     
     Ort::RunOptions run_options = Ort::RunOptions{ nullptr };
     auto output_tensors = session->Run(Ort::RunOptions{ nullptr }, &input_name, &input_tensor, 1, &output_name, 1);
+    // 释放 input_tensor
+    input_tensor.release();
     
     assert(output_tensors.size() == 1);
     assert(output_tensors.front().IsTensor());
     auto& output_tensor = output_tensors[0];
     
     from_output_tensor(output_tensor);
+    // 释放 output_tensor
+    output_tensor.release();
 }
 
 
@@ -107,7 +112,7 @@ Ort::Value libocr::onnx::text_recognizer::to_input_tensor(cv::Mat &src)
     auto memory_info = Ort::MemoryInfo::CreateCpu(OrtArenaAllocator, OrtMemTypeDefault);
     // create input tensor
     auto input_tensor = Ort::Value::CreateTensor<float>(memory_info, input_data.data(), input_size, input_shape.data(), input_shape.size());
-    return input_tensor;
+    return std::move(input_tensor);
 }
 
 void libocr::onnx::text_recognizer::from_output_tensor(Ort::Value &output_tensor)
