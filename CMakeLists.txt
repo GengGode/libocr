@@ -1,4 +1,4 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8) #设定最小版本号
+CMAKE_MINIMUM_REQUIRED(VERSION 3.0) #设定最小版本号
 PROJECT(libocr)                       #设定工程名
 
 # 定义 LIBOCR_EXPORT
