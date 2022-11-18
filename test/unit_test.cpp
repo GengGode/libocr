@@ -37,31 +37,52 @@ int Test_File()
     if (text != result)
     {
         static bool first = true;
-        if (first)
-        {
+        if (first) {
             first = false;
-            std::cout <<"text:"<< text <<" != " << result << std::endl;
+            std::cout << "text:" << text << " != " << result << std::endl;
         }
-        std::cout << "error code:" << " = file:" << image_path << std::endl;
+        // std::cout << "error code:" << " = file:" << image_path << std::endl;
         return -1;
     }
     return 0;
 }
 
+#include <windows.h>
+#include <psapi.h>
+
 int main() {
-    int test_cycle = 10;
+    int test_cycle = 200;
     
     int test_count = 0;
     int test_error = 0;
-    for (int i = 0; i < test_cycle; i++)
-    {
+    
+    int mem_used_before              = 0;
+    int mem_used_after               = 0;
+    
+    PROCESS_MEMORY_COUNTERS pmc;
+    auto                    mem_info = GetProcessMemoryInfo(GetCurrentProcess(), &pmc, sizeof(pmc));
+    if (mem_info) {
+        mem_used_before = pmc.WorkingSetSize;
+    }
+    
+    for (int i = 0; i < test_cycle; i++) {
         test_count++;
+        
         int res = Test_File();
-        if (res != 0)
-        {
+        
+        // 当前系统内存占用
+        mem_info = GetProcessMemoryInfo(GetCurrentProcess(), &pmc, sizeof(pmc));
+        if (mem_info) {
+            mem_used_after = pmc.WorkingSetSize;
+        }
+        
+        if (res != 0) {
             test_error++;
         }
+        double mem_used = (mem_used_after - mem_used_before) / 1024.0 / 1024.0;
+        std::cout << "test_count:" << test_count << " test_error:" << test_error << " mem_used:" << mem_used
+                  << std::endl;
     }
-    std::cout << "test_count:" << test_count << " test_error:" << test_error << std::endl;
+    //std::cout << "test_count:" << test_count << " test_error:" << test_error << std::endl;
     return 0;
 }

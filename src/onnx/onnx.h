@@ -15,7 +15,7 @@ namespace libocr::onnx
     public:
         onnx(){};
         ~onnx(){};
-        virtual void run(cv::Mat& input_image) = 0;
+        virtual std::string run(cv::Mat &input_image) = 0;
     public:
         Ort::Session* session = nullptr;
         Ort::Env env;

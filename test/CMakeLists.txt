@@ -1,5 +1,5 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 3.0) #设定最小版本号
-PROJECT(libocr_test)                       #设定工程名
+cmake_minimum_required(VERSION 3.21)
+project(libocr_test)
 
 # 设置为C++17
 set(CMAKE_CXX_STANDARD 17)
@@ -46,9 +46,3 @@ set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT $
 
 # 拷贝测试图片到输出目录
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/image/test.png DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
-
-
-#target_link_libraries(${PROJECT_NAME} PRIVATE
-#        debug ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/Debug/cvAutoTrack.lib
-#        optimized ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/Release/cvAutoTrack.lib
-#        )

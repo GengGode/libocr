@@ -19,8 +19,8 @@ libocr::ocr_manager::~ocr_manager() {
 }
 
 std::string libocr::ocr_manager::recognize(cv::Mat &image) {
-    text_rec->run(image);
-    return text_rec->get_output();
+    
+    return text_rec->run(image);
 }
 
 int libocr::ocr_manager::recognize(int image_width, int image_height, const char *image_data, int image_data_size,
@@ -44,18 +44,19 @@ int libocr::ocr_manager::recognize(int image_width, int image_height, const char
 int libocr::ocr_manager::recognize(const char *image_data, int image_data_size, char *result, int result_size) {
     auto image_array = cv::Mat(1, image_data_size, CV_8UC1, (void *) image_data);
     cv::Mat image = cv::imdecode(image_array, cv::IMREAD_COLOR);
-
-    if (image.empty()){
+    
+    if (image.empty()) {
         return -1;
     }
-    if (image.channels()!=3){
+    if (image.channels() != 3) {
         return -2;
     }
     std::string text = recognize(image);
     if (text.size() > result_size) {
         return -1;
     }
-    
+    image.release();
+    image_array.release();
     strcpy_s(result, result_size, text.c_str());
     return 0;
 }

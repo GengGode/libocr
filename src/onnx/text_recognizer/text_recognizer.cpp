@@ -39,7 +39,7 @@ libocr::onnx::text_recognizer::~text_recognizer()
 
 void libocr::onnx::text_recognizer::set_options()
 {
-    session_options.SetInterOpNumThreads(4);
+    //session_options.SetInterOpNumThreads(1);
     session_options.SetGraphOptimizationLevel(GraphOptimizationLevel::ORT_ENABLE_EXTENDED);
 }
 
@@ -52,35 +52,18 @@ void libocr::onnx::text_recognizer::init_model()
     model_input_img_height = static_cast<int>(get_input_shape()[2]);
 }
 
-void libocr::onnx::text_recognizer::run(cv::Mat &input_image)
-{
-    Ort::Value input_tensor = to_input_tensor(input_image);
-    
+std::string libocr::onnx::text_recognizer::run(cv::Mat &input_image) {
+    to_input_tensor(input_image);
     assert(input_tensor.IsTensor());
-    
-    Ort::RunOptions run_options = Ort::RunOptions{ nullptr };
-    auto output_tensors = session->Run(Ort::RunOptions{ nullptr }, &input_name, &input_tensor, 1, &output_name, 1);
-    // 释放 input_tensor
-    input_tensor.release();
-    
+    Ort::RunOptions run_options = Ort::RunOptions{nullptr};
+    session->Run(run_options, &input_name, &input_tensor, 1, &output_name, &output_tensor, 1);
     assert(output_tensors.size() == 1);
     assert(output_tensors.front().IsTensor());
-    auto& output_tensor = output_tensors[0];
-    
-    from_output_tensor(output_tensor);
-    // 释放 output_tensor
-    output_tensor.release();
+    return from_output_tensor();
 }
 
-
-std::string libocr::onnx::text_recognizer::get_output()
-{
-    return text_result;
-}
-
-Ort::Value libocr::onnx::text_recognizer::to_input_tensor(cv::Mat &src)
-{
-    auto scale = model_input_img_height / (float)src.rows;
+void libocr::onnx::text_recognizer::to_input_tensor(cv::Mat &src) {
+    auto scale = model_input_img_height / (float) src.rows;
     
     // resize input img
     cv::Mat input_img;
@@ -111,21 +94,19 @@ Ort::Value libocr::onnx::text_recognizer::to_input_tensor(cv::Mat &src)
     // memory input img
     auto memory_info = Ort::MemoryInfo::CreateCpu(OrtArenaAllocator, OrtMemTypeDefault);
     // create input tensor
-    auto input_tensor = Ort::Value::CreateTensor<float>(memory_info, input_data.data(), input_size, input_shape.data(), input_shape.size());
-    return std::move(input_tensor);
+    input_tensor = Ort::Value::CreateTensor<float>(memory_info, input_data.data(), input_size, input_shape.data(),
+                                                   input_shape.size());
 }
 
-void libocr::onnx::text_recognizer::from_output_tensor(Ort::Value &output_tensor)
-{
-    auto output_tensor_info = output_tensor.GetTensorTypeAndShapeInfo();
-    auto output_type = output_tensor_info.GetElementType();
-    auto output_shape = output_tensor_info.GetShape();
-    auto output_size = output_tensor_info.GetElementCount();
-    auto output_data_ptr = output_tensor.GetTensorMutableData<float>();
+std::string libocr::onnx::text_recognizer::from_output_tensor() {
+    auto               output_tensor_info = output_tensor.GetTensorTypeAndShapeInfo();
+    auto               output_type        = output_tensor_info.GetElementType();
+    auto               output_shape       = output_tensor_info.GetShape();
+    auto               output_size        = output_tensor_info.GetElementCount();
+    auto               output_data_ptr    = output_tensor.GetTensorMutableData<float>();
     std::vector<float> output_data(output_data_ptr, output_data_ptr + output_size);
     // re norm
-    for (auto& v : output_data)
-    {
+    for (auto &v: output_data) {
         v = exp(v);
     }
     int output_shape_2 = static_cast<int>(output_shape[2]);
@@ -145,19 +126,18 @@ void libocr::onnx::text_recognizer::from_output_tensor(Ort::Value &output_tensor
         max_index_value.push_back(std::make_pair(max_index, max_value));
     }
     
-    auto& result = output_data_2d;
-    std::string ans = "";
-    std::string last_word = "";
-    for (auto& v : result)
-    {
+    auto &result = output_data_2d;
+    std::string text_result = "";
+    std::string last_word   = "";
+    for (auto& v : result) {
         auto max_index = static_cast<int>(std::max_element(v.begin(), v.end()) - v.begin());
         //auto max_value = *std::max_element(v.begin(), v.end());
-        auto word = get_keys_char(max_index-1);
-        if (word != last_word && word != keys.back())
-        {
-            ans += word;
+        auto word      = get_keys_char(max_index - 1);
+        if (word != last_word && word != keys.back()) {
+            text_result += word;
         }
-        last_word = word;
+        last_word      = word;
     }
-    text_result = ans;
+    
+    return text_result;
 }
