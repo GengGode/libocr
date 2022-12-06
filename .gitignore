@@ -3,3 +3,4 @@
 /.idea/
 /3rdparty/staticlib/opencv/opencv_world460.lib
 /3rdparty/staticlib/onnxruntime/onnxruntime_providers.lib
+/resource/old/
