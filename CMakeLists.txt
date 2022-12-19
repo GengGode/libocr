@@ -71,7 +71,7 @@ endif ()
 # 设置dll输出目录
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/lib)
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/bin)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/lib)
 
 
 # 设置 添加resource.rc资源
@@ -133,7 +133,7 @@ LINK_DIRECTORIES(${PROJECT_SOURCE_DIR}/3rdparty/staticlib/onnxruntime-external)
 # 编译动态库
 if (BUILD_SHARED_LIBS)
     add_library(libocr SHARED ${VERSIONINFO_RC} ${RESOURCE_RC}
-            ${PROJECT_SOURCE_DIR}/include/libocr.h ${PROJECT_SOURCE_DIR}/src/libocr.cpp
+            include/libocr/libocr.h ${PROJECT_SOURCE_DIR}/src/libocr.cpp
             src/ocr/ocr.cpp
             src/ocr_manager/ocr_manager.cpp
             src/onnx/onnx.h
@@ -145,7 +145,7 @@ endif ()
 # 编译静态库
 if (BUILD_STATIC_LIBS)
     add_library(libocr STATIC ${VERSIONINFO_RC} ${RESOURCE_RC}
-            ${PROJECT_SOURCE_DIR}/include/libocr.h ${PROJECT_SOURCE_DIR}/src/libocr.cpp
+            include/libocr/libocr.h ${PROJECT_SOURCE_DIR}/src/libocr.cpp
             src/ocr/ocr.cpp
             src/ocr_manager/ocr_manager.cpp
             src/onnx/onnx.h

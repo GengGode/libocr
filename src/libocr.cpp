@@ -1,7 +1,7 @@
 //
 // Created by GengG on 2022/11/9.
 //
-#include "../include/libocr.h"
+#include "libocr/libocr.h"
 //#include "ocr/ocr.h"
 #include "ocr_manager/ocr_manager.h"
 

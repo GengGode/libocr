@@ -3,7 +3,7 @@
 //
 #include <iostream>
 #include <fstream>
-#include "libocr.h"
+#include "libocr/libocr.h"
 
 int Test_File()
 {
