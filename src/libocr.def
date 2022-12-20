@@ -1,0 +1,9 @@
+LIBRARY libocr
+EXPORTS
+    ocr
+    ocr_image_data
+    ocr_file_data
+    ocr_file_path
+    ocr_file
+    ocr_image
+    free_char
