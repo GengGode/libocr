@@ -1,10 +1,17 @@
 //
 // Created by GengG on 2022/11/9.
 //
+#ifdef USED_LIBOCOR_STATIC_LIB
+#define _LIB
+#endif
+#ifndef _LIB
 #ifdef LIBOCR_EXPORT
 #define LIBOCR_API __declspec(dllexport)
 #else
 #define LIBOCR_API __declspec(dllimport)
+#endif
+#else
+#define LIBOCR_API
 #endif
 
 // namespace : libocr
