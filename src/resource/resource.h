@@ -9,8 +9,8 @@
 // Microsoft Visual C++ 生成的包含文件。
 // 供 OnnxRT_OCR.rc 使用
 //
-#define IDR_ONNX_CHT                    101
-#define IDR_TXT_CHT_DICT                102
+#define IDR_ONNX_CHT                    1101
+#define IDR_TXT_CHT_DICT                1102
 
 // Next default values for new objects
 //
