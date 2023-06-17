@@ -10,6 +10,13 @@ set(CMAKE_SHARED_LIBRARY_PREFIX "")
 # 设置为C++17
 set(CMAKE_CXX_STANDARD 17)
 
+# 设置UTF-8编码
+add_definitions(-DUNICODE -D_UNICODE)
+# msvc编译器设置utf-8编码
+if (MSVC)
+    add_compile_options("/utf-8")
+endif ()
+
 #=======================================================================================================================
 
 # 设置编译目标
@@ -23,12 +30,12 @@ set(BUILD_TARGET libocr)
 #option(BUILD_PLATFORM "Build platform" "x64")
 
 # 设置是否编译动态库
-option(BUILD_SHARED_LIBS "Build shared libs" OFF)
-set(BUILD_SHARED_LIBS OFF)
+option(BUILD_SHARED_LIBS "Build shared libs" ON)
+set(BUILD_SHARED_LIBS ON)
 
 # 设置是否编译静态库
-option(BUILD_STATIC_LIBS "Build static libs" ON)
-set(BUILD_STATIC_LIBS ON)
+option(BUILD_STATIC_LIBS "Build static libs" OFF)
+set(BUILD_STATIC_LIBS OFF)
 
 # 设置是否编译测试
 option(BUILD_TEST "Build test" ON)
@@ -65,7 +72,7 @@ if (CMAKE_BUILD_TYPE STREQUAL "Debug")
     # 设置 MTd_StaticDebug
     message(STATUS "Configuring : MTd_StaticDebug")
     set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:>")
-    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MT")
+    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MTd")
 endif ()
 
 # 设置dll输出目录
@@ -165,19 +172,39 @@ install(TARGETS libocr
 
 if (BUILD_TEST)
     # 添加测试项目 libocr_test
+    enable_testing()
     add_subdirectory(test)
     # 拷贝生成的dll、lib到test目录
-    add_custom_command(TARGET libocr POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy
-            ${CMAKE_CURRENT_LIST_DIR}/bin/libocr.lib
-            ${CMAKE_BINARY_DIR}/test/libocr.lib
-            )
-    if (BUILD_SHARED_LIBS)
+
+    # 如果使用Visual Studio系列编译器 拷贝目录则在bin/Debug或bin/Release下
+    if (MSVC)
+        # 如果使用MinGW系列编译器 拷贝目录则在bin下
         add_custom_command(TARGET libocr POST_BUILD
                 COMMAND ${CMAKE_COMMAND} -E copy
-                ${CMAKE_CURRENT_LIST_DIR}/bin/libocr.dll
-                ${CMAKE_BINARY_DIR}/test/bin/libocr.dll
+                ${CMAKE_CURRENT_LIST_DIR}/lib/libocr.lib
+                ${CMAKE_BINARY_DIR}/test/libocr.lib
                 )
+        if (BUILD_SHARED_LIBS)
+            add_custom_command(TARGET libocr POST_BUILD
+                    COMMAND ${CMAKE_COMMAND} -E copy
+                    ${CMAKE_CURRENT_LIST_DIR}/bin/libocr.dll
+                    ${CMAKE_BINARY_DIR}/test/bin/libocr.dll
+                    )
+        endif ()
+    else()
+        # 如果使用MinGW系列编译器 拷贝目录则在bin下
+        add_custom_command(TARGET libocr POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E copy
+                ${CMAKE_CURRENT_LIST_DIR}/bin/libocr.lib
+                ${CMAKE_BINARY_DIR}/test/libocr.lib
+                )
+        if (BUILD_SHARED_LIBS)
+            add_custom_command(TARGET libocr POST_BUILD
+                    COMMAND ${CMAKE_COMMAND} -E copy
+                    ${CMAKE_CURRENT_LIST_DIR}/bin/libocr.dll
+                    ${CMAKE_BINARY_DIR}/test/bin/libocr.dll
+                    )
+        endif ()
     endif ()
 endif ()
 

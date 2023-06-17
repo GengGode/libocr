@@ -1,6 +1,7 @@
-/cmake-build-debug/
-/cmake-build-release/
+/build/
+/cmake-build-*/
+/.vs/
 /.idea/
-/3rdparty/staticlib/opencv/opencv_world460.lib
-/3rdparty/staticlib/onnxruntime/onnxruntime_providers.lib
+/3rdparty/staticlib/*
+/3rdparty/staticlib/*
 /resource/old/

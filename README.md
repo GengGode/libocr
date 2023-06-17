@@ -67,7 +67,7 @@ cd ../..
 mkdir build
 cd build
 cmake ..
-MSBuild libocr.sln /p:Configuration=Release
+msbuild .\libocr.sln /p:Configuration=Release /p:RuntimeLibrary=MultiThreaded
 ```
 
 ## Customize : Customize your model

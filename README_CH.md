@@ -68,7 +68,7 @@ cd ../..
 mkdir build
 cd build
 cmake ..
-MSBuild libocr.sln /p:Configuration=Release
+msbuild .\libocr.sln /p:Configuration=Release /p:RuntimeLibrary=MultiThreaded
 ```
 
 ## 自定义：自定义您的模型
