@@ -53,7 +53,6 @@ endif ()
 #=======================================================================================================================
 
 # Release模式
-if (CMAKE_BUILD_TYPE STREQUAL "Release")
     # 生成pdb文件
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Zi")
     set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} /DEBUG /OPT:REF /OPT:ICF")
@@ -62,7 +61,7 @@ if (CMAKE_BUILD_TYPE STREQUAL "Release")
     message(STATUS "Configuring : MT_StaticRelease")
     set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Release>:>")
     set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT")
-endif ()
+
 # Debug模式
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
     # 生成pdb文件
