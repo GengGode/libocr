@@ -44,7 +44,7 @@ jobs:
       run: msbuild ${{github.workspace}}/build/libocr.sln /m /p:Configuration=${{env.BUILD_TYPE}} /p:RuntimeLibrary=MultiThreaded
 
     - name: Copy Release Lib
-      run: copy ${{github.workspace}}\build\Release\libocr.dll ${{github.workspace}}\build\Release\libocr.lib ${{github.workspace}}\build\Release\libocr.pdb -y ${{github.workspace}}\build\libocr\ && copy ${{github.workspace}}\include\libocr.h -y ${{github.workspace}}\build\libocr\Release\
+      run: copy ${{github.workspace}}\build\Release\libocr.dll ${{github.workspace}}\build\Release\libocr.lib -y ${{github.workspace}}\build\libocr\ && copy ${{github.workspace}}\include\libocr.h -y ${{github.workspace}}\build\libocr\Release\
 
     - name: Test
       working-directory: ${{github.workspace}}/build
