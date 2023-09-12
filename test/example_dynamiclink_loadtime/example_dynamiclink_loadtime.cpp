@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <chrono>
 #include <Windows.h>
 #include <libocr/libocr.h>
 
@@ -22,6 +23,8 @@ int Test_File()
     std::string text;
     //=========================================================================
     {
+        std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+
         char *result_buff = new char[1024];
         //int res= libocr::ocr_file_path(image_path.c_str(), result_buff, 1024);
         int res= libocr::ocr_file_data(image_data.c_str(), image_data.size(), result_buff, 1024);
@@ -34,6 +37,9 @@ int Test_File()
         }
         //libocr::free_char(result);
         delete[] result_buff;
+        std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+        std::cout << "time:" << std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count() << "ms"
+                  << std::endl;
     }
     //=========================================================================
     std::cout << text << std::endl;
