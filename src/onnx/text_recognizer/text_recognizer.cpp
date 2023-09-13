@@ -57,7 +57,7 @@ std::string libocr::onnx::text_recognizer::run(cv::Mat &input_image) {
         to_input_tensor(input_image);
     }
     catch (Ort::Exception &e) {
-        std::cout << "input image to tensor exception: " << e.what() << std::endl;
+        //std::cout << "input image to tensor exception: " << e.what() << std::endl;
         return "";
     }
     
@@ -66,7 +66,7 @@ std::string libocr::onnx::text_recognizer::run(cv::Mat &input_image) {
         session->Run(run_options, &input_name, &input_tensor, 1, &output_name, &output_tensor, 1);
     }
     catch (Ort::Exception &e) {
-        std::cout << "run model exception: " << e.what() << std::endl;
+        //std::cout << "run model exception: " << e.what() << std::endl;
         return "";
     }
     
@@ -74,7 +74,7 @@ std::string libocr::onnx::text_recognizer::run(cv::Mat &input_image) {
         return from_output_tensor();
     }
     catch (Ort::Exception &e) {
-        std::cout << "output tensor to string exception: " << e.what() << std::endl;
+        //std::cout << "output tensor to string exception: " << e.what() << std::endl;
         return "";
     }
 }

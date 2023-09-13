@@ -41,11 +41,11 @@
 /* #undef HAVE_CUFFT */
 
 /* DirectX */
-#define HAVE_DIRECTX
-#define HAVE_DIRECTX_NV12
-#define HAVE_D3D11
-#define HAVE_D3D10
-#define HAVE_D3D9
+/* #undef HAVE_DIRECTX */
+/* #undef HAVE_DIRECTX_NV12 */
+/* #undef HAVE_D3D11 */
+/* #undef HAVE_D3D10 */
+/* #undef HAVE_D3D9 */
 
 /* Eigen Matrix & Linear Algebra Library */
 /* #undef HAVE_EIGEN */
@@ -63,14 +63,17 @@
 #define HAVE_INTTYPES_H 1
 
 /* Intel Integrated Performance Primitives */
-#define HAVE_IPP
-#define HAVE_IPP_ICV
-#define HAVE_IPP_IW
-#define HAVE_IPP_IW_LL
+/* #undef HAVE_IPP */
+/* #undef HAVE_IPP_ICV */
+/* #undef HAVE_IPP_IW */
+/* #undef HAVE_IPP_IW_LL */
 
 /* JPEG-2000 codec */
 #define HAVE_OPENJPEG
 /* #undef HAVE_JASPER */
+
+/* AVIF codec */
+/* #undef HAVE_AVIF */
 
 /* IJG JPEG codec */
 #define HAVE_JPEG
@@ -95,7 +98,7 @@
 /* #undef HAVE_OPENCL_SVM */
 
 /* NVIDIA OpenCL D3D Extensions support */
-#define HAVE_OPENCL_D3D11_NV
+/* #undef HAVE_OPENCL_D3D11_NV */
 
 /* OpenEXR codec */
 #define HAVE_OPENEXR
@@ -105,6 +108,9 @@
 
 /* PNG codec */
 #define HAVE_PNG
+
+/* PNG codec */
+/* #undef HAVE_SPNG */
 
 /* Posix threads (pthreads) */
 /* #undef HAVE_PTHREAD */
@@ -144,6 +150,6 @@
 #define OPENCV_TRACE
 
 /* Library QR-code decoding */
-#define HAVE_QUIRC
+/* #undef HAVE_QUIRC */
 
 #endif // OPENCV_CVCONFIG_H_INCLUDED
