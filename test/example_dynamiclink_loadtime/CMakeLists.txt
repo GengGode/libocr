@@ -46,3 +46,10 @@ set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT $
 
 # 拷贝测试图片到输出目录
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/../image/test.png DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
+
+#copy libocr.dll to test/bin/Release
+add_custom_command(TARGET example_dynamiclink_loadtime POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        $<TARGET_FILE:libocr>
+        $<TARGET_FILE_DIR:example_dynamiclink_loadtime>
+)
