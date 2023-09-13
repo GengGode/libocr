@@ -45,14 +45,14 @@ jobs:
 
     - name: Copy Release Lib
       run: |
-        dir ${{github.workspace}}\bin
-        dir ${{github.workspace}}\lib
-        dir ${{github.workspace}}\include
+        dir ${{github.workspace}}\bin\Release
+        dir ${{github.workspace}}\lib\Release
+        dir ${{github.workspace}}\include\libocr
         mkdir ${{github.workspace}}\build\libocr 
-        copy ${{github.workspace}}\bin\libocr.dll ${{github.workspace}}\build\libocr\ 
-        copy ${{github.workspace}}\lib\libocr.lib ${{github.workspace}}\build\libocr\ 
-        copy ${{github.workspace}}\bin\libocr.pdb ${{github.workspace}}\build\libocr\ 
-        copy ${{github.workspace}}\include\libocr.h ${{github.workspace}}\build\libocr\
+        copy ${{github.workspace}}\bin\Release\libocr.dll ${{github.workspace}}\build\libocr\ 
+        copy ${{github.workspace}}\lib\Release\libocr.lib ${{github.workspace}}\build\libocr\ 
+        copy ${{github.workspace}}\bin\Release\libocr.pdb ${{github.workspace}}\build\libocr\ 
+        copy ${{github.workspace}}\include\libocr\libocr.h ${{github.workspace}}\build\libocr\
         
     - name: Test
       working-directory: ${{github.workspace}}/build
