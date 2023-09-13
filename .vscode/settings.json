@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "*.cpp": "cpp",
+        "*.h": "cpp"
+    },
+    "editor.formatOnSave": true,
+}
