@@ -35,7 +35,7 @@ namespace libocr
 
     inline int recognize_image_data(int image_width, int image_height, const char *image_data, unsigned int row_pitch,
                                     char *result, int result_size) {
-      return libocr::ocr_manager::get_instance().recognize(image_width, image_height, image_data, row_pitch, result, result_size);
+        return libocr::ocr_manager::get_instance().recognize(image_width, image_height, image_data, row_pitch, result, result_size);
     };
     
     inline int recognize_file_data(const char *image_data, int image_data_size, char *result, int result_size) {
