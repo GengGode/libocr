@@ -51,7 +51,7 @@ void libocr::onnx::text_recognizer::init_model()
     get_input_name();
     get_output_name();
     // get input/output shape
-    model_input_img_height = static_cast<int>(get_input_shape()[2]);
+    model_input_img_height = static_cast<int>(get_input_shape()[2]) == -1 ? 48 : static_cast<int>(get_input_shape()[2]);
 }
 
 std::string libocr::onnx::text_recognizer::run(cv::Mat &input_image)
@@ -65,7 +65,7 @@ std::string libocr::onnx::text_recognizer::run(cv::Mat &input_image)
         // std::cout << "input image to tensor exception: " << e.what() << std::endl;
         return "";
     }
-    
+
     try
     {
         Ort::RunOptions run_options = Ort::RunOptions{nullptr};
@@ -76,7 +76,7 @@ std::string libocr::onnx::text_recognizer::run(cv::Mat &input_image)
         // std::cout << "run model exception: " << e.what() << std::endl;
         return "";
     }
-    
+
     try
     {
         return from_output_tensor();
@@ -91,7 +91,7 @@ std::string libocr::onnx::text_recognizer::run(cv::Mat &input_image)
 void libocr::onnx::text_recognizer::to_input_tensor(cv::Mat &src)
 {
     auto scale = model_input_img_height / (float)src.rows;
-    
+
     // resize input img
     cv::Mat input_img;
     cv::resize(src, input_img, cv::Size(), scale, scale);
@@ -117,7 +117,7 @@ void libocr::onnx::text_recognizer::to_input_tensor(cv::Mat &src)
             }
         }
     }
-    
+
     // memory input img
     auto memory_info = Ort::MemoryInfo::CreateCpu(OrtArenaAllocator, OrtMemTypeDefault);
     // create input tensor
@@ -154,7 +154,7 @@ std::string libocr::onnx::text_recognizer::from_output_tensor()
         auto max_value = *std::max_element(v.begin(), v.end());
         max_index_value.push_back(std::make_pair(max_index, max_value));
     }
-    
+
     auto &result = output_data_2d;
     std::string text_result = "";
     std::string last_word = "";
@@ -169,6 +169,6 @@ std::string libocr::onnx::text_recognizer::from_output_tensor()
         }
         last_word = word;
     }
-    
+
     return text_result;
 }
