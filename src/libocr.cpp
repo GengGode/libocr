@@ -20,6 +20,13 @@ libocr::ocr_image_data(int image_width, int image_height, const char *image_data
 
 int _stdcall
 
+libocr::ocr_image_data_rgba(int image_width, int image_height, const char *image_data, unsigned int row_pitch,
+                            char *result, int result_size) {
+    return libocr::recognize_image_data(image_width, image_height, image_data, row_pitch, result, result_size);
+}
+
+int _stdcall
+
 libocr::ocr_file_data(const char *image_data, int image_data_size, char *result, int result_size) {
     return libocr::recognize_file_data(image_data, image_data_size, result, result_size);
 }

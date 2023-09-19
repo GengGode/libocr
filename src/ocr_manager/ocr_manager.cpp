@@ -41,6 +41,23 @@ int libocr::ocr_manager::recognize(int image_width, int image_height, const char
     return 0;
 }
 
+int libocr::ocr_manager::recognize(int image_width, int image_height, const char *image_data, unsigned int row_pitch,
+                                   char *result, int result_size) {
+    cv::Mat image = cv::Mat(image_height, image_width, CV_8UC4, (void *) image_data, row_pitch);
+    cv::Mat dst;
+    cv::cvtColor(image, dst, cv::COLOR_RGBA2RGB);
+    if (image.empty()){
+        return -1;
+    }
+    std::string text = recognize(dst);
+    if (text.size() > result_size) {
+        return -1;
+    }
+
+    strcpy_s(result, result_size, text.c_str());
+    return 0;
+}
+
 int libocr::ocr_manager::recognize(const char *image_data, int image_data_size, char *result, int result_size) {
     auto image_array = cv::Mat(1, image_data_size, CV_8UC1, (void *) image_data);
     cv::Mat image = cv::imdecode(image_array, cv::IMREAD_COLOR);

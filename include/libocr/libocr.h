@@ -87,6 +87,9 @@ namespace libocr
     LIBOCR_API int
     ocr_image_data(int image_width, int image_height, const char *image_data, int image_data_size, char *result,
                    int result_size);
+    LIBOCR_API int
+    ocr_image_data_rgba(int image_width, int image_height, const char *image_data, unsigned int row_pitch,
+                        char *result, int result_size);
     LIBOCR_API int ocr_file_data(const char *image_data, int image_data_size, char *result, int result_size);
     LIBOCR_API int ocr_file_path(const char *image_file, char *result, int result_size);
 // allocate memory
