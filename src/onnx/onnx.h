@@ -13,11 +13,7 @@ namespace libocr::onnx
     class onnx
     {
     public:
-        onnx(){};
-        ~onnx(){};
-        virtual std::string run(cv::Mat &input_image) = 0;
-    public:
-        Ort::Session* session = nullptr;
+        std::shared_ptr<Ort::Session> session;
         Ort::Env env;
         Ort::SessionOptions session_options = Ort::SessionOptions();
 
@@ -45,4 +41,4 @@ namespace libocr::onnx
     };
 }
 
-#endif //LIBOCR_ONNX_H
+#endif // LIBOCR_ONNX_H
