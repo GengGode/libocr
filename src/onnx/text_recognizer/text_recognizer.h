@@ -31,18 +31,21 @@ namespace libocr::onnx
 
     private:
         std::vector<std::string> keys;
-        int                      model_input_img_height = 48;
+        int model_input_img_height = 48;
     
-        std::string get_keys_char(int index) {
-            if (index < 0 || index >= keys.size()) {
+        std::string get_keys_char(int index)
+        {
+            if (index < 0 || index >= keys.size())
+            {
                 return keys.back();
             }
             return keys[index];
         }
     };
     
-    inline static std::string ocr_run(text_recognizer &text_rec, cv::Mat &image) {
+    inline static std::string ocr_run(text_recognizer &text_rec, cv::Mat &image)
+    {
         return text_rec.run(image);
     }
 }
-#endif //LIBOCR_TEXT_RECOGNIZER_H
+#endif // LIBOCR_TEXT_RECOGNIZER_H
