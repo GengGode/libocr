@@ -12,7 +12,7 @@ libocr::onnx::text_recognizer::text_recognizer()
     auto model = libocr::utils::from_resource_load_onnx(IDR_ONNX_CHT);
     session = new Ort::Session(env, model.data, model.data_length, session_options);
     //===== this set keys resource IDR Txt  =====
-    auto dict = libocr::utils::from_resource_load_txt(IDR_TXT_CHT_DICT);
+    auto dict = libocr::utils::from_resource_load_det_txt(IDR_TXT_CHT_DICT);
     {
         auto dict_string = std::string((char *)dict.data, dict.data_length);
         std::istringstream in(dict_string);
@@ -56,10 +56,10 @@ void libocr::onnx::text_recognizer::init_model()
 
 std::string libocr::onnx::text_recognizer::run(cv::Mat &input_image)
 {
-        to_input_tensor(input_image);
-        Ort::RunOptions run_options = Ort::RunOptions{nullptr};
-        session->Run(run_options, &input_name, &input_tensor, 1, &output_name, &output_tensor, 1);
-        return from_output_tensor();
+    to_input_tensor(input_image);
+    Ort::RunOptions run_options = Ort::RunOptions{nullptr};
+    session->Run(run_options, &input_name, &input_tensor, 1, &output_name, &output_tensor, 1);
+    return from_output_tensor();
 }
 
 void libocr::onnx::text_recognizer::to_input_tensor(cv::Mat &src)
