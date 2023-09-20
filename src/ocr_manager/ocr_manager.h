@@ -10,13 +10,13 @@ namespace libocr
 {
     namespace onnx
     {
-        // class text_detector;
+        class text_detector;
         class text_recognizer;
     }
 
     class ocr_manager
     {
-        // onnx::text_detector *text_det;
+        onnx::text_detector *text_det;
         onnx::text_recognizer *text_rec;
         ocr_manager();
 
@@ -24,6 +24,7 @@ namespace libocr
         static ocr_manager &get_instance();
         ~ocr_manager();
 
+        std::string detect_and_recognize(cv::Mat &image);
         std::string recognize(cv::Mat &image);
 
         int recognize(int image_width, int image_height, const char *image_data, int image_data_size, char *result, int result_size);
