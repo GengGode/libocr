@@ -50,7 +50,8 @@ END
 // Onnx
 //
 
-IDR_ONNX_CHT            Onnx                    "rec_model.onnx"
+IDR_ONNX_DET            Onnx                    "model_det.onnx"
+IDR_ONNX_CHT_REC        Onnx                    "model_rec.onnx"
 
 
 /////////////////////////////////////////////////////////////////////////////

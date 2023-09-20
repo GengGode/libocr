@@ -96,7 +96,8 @@ if (MSVC)
     message(STATUS "Version : ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}")
 
     # message(STATUS "Adding model resource")
-    set(MODEL_ONNX_FILE "${CMAKE_SOURCE_DIR}/resource/rec_model.onnx")
+    set(ONNX_MODEL_REC_FILE "${CMAKE_SOURCE_DIR}/resource/model_rec.onnx")
+    set(ONNX_MODEL_DET_FILE "${CMAKE_SOURCE_DIR}/resource/model_det.onnx")
     if (EXISTS ${MODEL_ONNX_FILE})
         message(STATUS "Check Model : [yes]")
         #file(GLOB_RECURSE MODEL_FILES ${CMAKE_SOURCE_DIR}/model/*)
@@ -105,7 +106,8 @@ if (MSVC)
         #configure_file("${CMAKE_SOURCE_DIR}/resource/model.rc.in" "${MODEL_RC}")
     else ()
         message(STATUS "Check Model : [no]")
-        message(STATUS "model file : ${MODEL_ONNX_FILE}")
+        message(STATUS "rec model file : ${ONNX_MODEL_REC_FILE}")
+        message(STATUS "det model file : ${ONNX_MODEL_DET_FILE}")
     endif ()
     set(RESOURCE_RC "${CMAKE_SOURCE_DIR}/resource/resource_model.rc")
 endif()
@@ -143,6 +145,9 @@ if (BUILD_SHARED_LIBS)
             src/ocr/ocr.cpp
             src/ocr_manager/ocr_manager.cpp
             src/onnx/onnx.h
+            src/onnx/text_detector/text_detector.h
+            src/onnx/text_detector/text_detector.cpp
+            src/onnx/text_recognizer/text_recognizer.h
             src/onnx/text_recognizer/text_recognizer.cpp
             src/resource/resource.h
             src/utils/utils.h

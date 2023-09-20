@@ -9,7 +9,7 @@ libocr::onnx::text_recognizer::text_recognizer()
 {
     set_options();
     //===== this set model resource IDR ONNX MODEL =====
-    auto model = libocr::utils::from_resource_load_onnx(IDR_ONNX_CHT);
+    auto model = libocr::utils::from_resource_load_onnx(IDR_ONNX_CHT_REC);
     session = new Ort::Session(env, model.data, model.data_length, session_options);
     //===== this set keys resource IDR Txt  =====
     auto dict = libocr::utils::from_resource_load_det_txt(IDR_TXT_CHT_DICT);
