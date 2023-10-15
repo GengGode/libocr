@@ -47,6 +47,10 @@ void libocr::onnx::text_recognizer::init_model()
 
 std::string libocr::onnx::text_recognizer::run(cv::Mat &input_image)
 {
+    // note(zyxeeker): 需要重置输出节点防止输入不同大小输时出错
+    if(output_tensor != nullptr) {
+        output_tensor = Ort::Value{ nullptr };
+    }
     to_input_tensor(input_image);
     Ort::RunOptions run_options = Ort::RunOptions{nullptr};
     session->Run(run_options, &input_name, &input_tensor, 1, &output_name, &output_tensor, 1);
