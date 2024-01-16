@@ -1,31 +1,54 @@
-function(find_onnxruntime)
+function(find_onnxruntime onnxruntime_dir_value)
+    set(base_dir ${CMAKE_BINARY_DIR}/.cache)
+    set(download_dir ${base_dir}/onnxruntime-download)
+    set(extract_dir ${base_dir}/onnxruntime-extract)
+    set(install_dir ${base_dir}/onnxruntime-static_lib)
+    set(download_file ${download_dir}/onnxruntime.zip)
+    set(extract_file ${extract_dir})
 
-# 判断平台
-if (WIN32)
-    file(DOWNLOAD https://github.com/csukuangfj/onnxruntime-libs/releases/download/v1.16.3/onnxruntime-win-x64-static_lib-1.16.3.tar.bz2 ${CMAKE_BINARY_DIR}/.cache/onnxruntime-static_lib.tar.bz2)
-elseif (UNIX)
-    file(DOWNLOAD https://github.com/csukuangfj/onnxruntime-libs/releases/download/v1.16.3/onnxruntime-linux-x64-static_lib-1.16.3.zip ${CMAKE_BINARY_DIR}/.cache/onnxruntime-static_lib.zip)
-endif ()
+    # 平台判断
+    if (WIN32)
+        set(download_url https://github.com/csukuangfj/onnxruntime-libs/releases/download/v1.16.3/onnxruntime-win-x64-static_lib-1.16.3.tar.bz2)
+    elseif (UNIX)
+        set(download_url https://github.com/csukuangfj/onnxruntime-libs/releases/download/v1.16.3/onnxruntime-linux-x64-static_lib-1.16.3.zip)
+    endif ()
 
-# 解压
-if (WIN32)
-    execute_process(COMMAND ${CMAKE_COMMAND} -E tar xzf ${CMAKE_BINARY_DIR}/.cache/onnxruntime-static_lib.tar.bz2 WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/.cache)
-elseif (UNIX)
-    execute_process(COMMAND ${CMAKE_COMMAND} -E tar xzf ${CMAKE_BINARY_DIR}/.cache/onnxruntime-static_lib.zip WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/.cache)
-endif ()
+    # 下载
+    if(NOT EXISTS ${download_file})
+        message(STATUS "Downloading onnxruntime from ${download_url} to ${download_file}")
+        file(DOWNLOAD ${download_url} ${download_file} SHOW_PROGRESS)
+        set(file_size 0)
+        file(READ ${download_file} file_content HEX)
+        string(LENGTH "${file_content}" file_size)
+        message(STATUS "Downloaded onnxruntime ${file_size} bytes")
+        if (file_size EQUAL 0)
+            message(FATAL_ERROR "Downloaded onnxruntime ${file_size} bytes, but expected 0 bytes")
+        endif ()
+    endif()
 
-# 设置库路径
-if (WIN32)
-    set(ONNXRUNTIME_LIB_PATH ${CMAKE_BINARY_DIR}/.cache/onnxruntime-static_lib/lib/x64/Release)
-elseif (UNIX)
-    set(ONNXRUNTIME_LIB_PATH ${CMAKE_BINARY_DIR}/.cache/onnxruntime-static_lib/lib)
-endif ()
+    # 解压
+    if(NOT EXISTS ${extract_file})
+        file(MAKE_DIRECTORY ${extract_file})
+        execute_process(COMMAND ${CMAKE_COMMAND} -E tar xzf ${download_file} WORKING_DIRECTORY ${extract_file})
 
-# 设置头文件路径
-set(ONNXRUNTIME_INCLUDE_PATH ${CMAKE_BINARY_DIR}/.cache/onnxruntime-static_lib/include/onnxruntime)
+        if (NOT EXISTS ${extract_file})
+            message(FATAL_ERROR "Extracted onnxruntime ${extract_file} does not exist")
+        endif()
+    endif()
 
-# 设置库
-set(onnxruntime_LIBRARIES ${ONNXRUNTIME_LIB_PATH}/onnxruntime.lib)
-set(onnxruntime_INCLUDE_DIRS ${ONNXRUNTIME_INCLUDE_PATH})
+    # 安装
+    if(NOT EXISTS ${install_dir})
+        file(MAKE_DIRECTORY ${install_dir})
+        file(GLOB onnxruntime_dir_path ${extract_file}/onnxruntime*)
+        get_filename_component(onnxruntime_dir_name ${onnxruntime_dir_path} NAME)
+        execute_process(COMMAND ${CMAKE_COMMAND} -E copy_directory ${extract_file}/${onnxruntime_dir_name} ${install_dir})
 
+        if (NOT EXISTS ${install_dir})
+            message(FATAL_ERROR "Installed onnxruntime ${install_dir} does not exist")
+        endif()
+    endif()
+
+    # 设置变量
+    set(${onnxruntime_dir_value} ${install_dir} PARENT_SCOPE)
+    message(STATUS "auto find onnxruntime done")
 endfunction(find_onnxruntime)
