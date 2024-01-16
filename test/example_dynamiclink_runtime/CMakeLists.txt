@@ -13,27 +13,9 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MDd")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MD")
 set(RESOURCE_RC "")
 
-# 设置输出目录
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/test/bin)
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/test/bin)
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/test/bin)
-
-# 设置头文件目录
-include_directories(${CMAKE_SOURCE_DIR}/../include)
-
-# 设置源文件目录
-#aux_source_directory(${CMAKE_SOURCE_DIR} SRC_LIST)
-
-# 设置依赖库目录
-link_directories(${CMAKE_BINARY_DIR}/bin)
-link_directories(${CMAKE_CURRENT_SOURCE_DIR}/lib)
-
 # 生成可执行文件
 #add_executable(${PROJECT_NAME} ${SRC_LIST})
 add_executable(${PROJECT_NAME} example_dynamiclink_runtime.cpp)
-
-# 链接依赖库
-target_link_libraries(${PROJECT_NAME} ${LIBS})
 
 # 设置工作目录
 set_target_properties(${PROJECT_NAME} PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
@@ -46,11 +28,4 @@ add_custom_command(TARGET example_dynamiclink_runtime POST_BUILD
 COMMAND ${CMAKE_COMMAND} -E copy_if_different
     ${CMAKE_CURRENT_SOURCE_DIR}/../image/test.png 
     $<TARGET_FILE_DIR:example_dynamiclink_runtime>
-)
-
-#copy libocr.dll to test/bin/Release
-add_custom_command(TARGET example_dynamiclink_runtime POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        $<TARGET_FILE:${BUILD_TARGET_NAME}>
-        $<TARGET_FILE_DIR:example_dynamiclink_runtime>
 )
