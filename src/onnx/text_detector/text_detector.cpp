@@ -9,7 +9,7 @@ libocr::onnx::text_detector::text_detector()
 {
     set_options();
     //===== this set model resource IDR ONNX MODEL =====
-    auto model = libocr::utils::from_resource_load_onnx(IDR_ONNX_DET);
+    auto model = onnx::from_resource_load_onnx(IDR_ONNX_DET);
     session = std::make_shared<Ort::Session>(env, model.data, model.data_length, session_options);
 
     init_model();
