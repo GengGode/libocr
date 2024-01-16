@@ -19,13 +19,13 @@ namespace libocr::onnx
 
         void init_model();
 
-        std::string run(cv::Mat &input_image);
+        std::string run(const cv::Mat &input_image);
 
     private:
         Ort::Value input_tensor{nullptr};
         Ort::Value output_tensor{nullptr};
 
-        void to_input_tensor(cv::Mat &src);
+        void to_input_tensor(const cv::Mat &src);
 
         std::string from_output_tensor();
 

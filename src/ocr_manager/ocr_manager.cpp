@@ -24,7 +24,7 @@ libocr::ocr_manager::~ocr_manager()
     delete text_rec;
 }
 
-std::string libocr::ocr_manager::detect_and_recognize(cv::Mat &image)
+std::string libocr::ocr_manager::detect_and_recognize(const cv::Mat &image)
 {
     std::string texts;
     for (auto &area : text_det->run(image))
@@ -32,7 +32,7 @@ std::string libocr::ocr_manager::detect_and_recognize(cv::Mat &image)
     return texts;
 }
 
-std::string libocr::ocr_manager::recognize(cv::Mat &image)
+std::string libocr::ocr_manager::recognize(const cv::Mat &image)
 {
     return text_rec->run(image);
 }

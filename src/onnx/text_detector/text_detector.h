@@ -25,12 +25,12 @@ namespace libocr::onnx
             cv::Rect rect;
             double score;
         };
-        std::vector<text_area> run(cv::Mat &input_image);
+        std::vector<text_area> run(const cv::Mat &input_image);
 
     private:
         Ort::Value input_tensor{nullptr};
         Ort::Value output_tensor{nullptr};
-        void to_input_tensor(cv::Mat &src);
+        void to_input_tensor(const cv::Mat &src);
 
         std::vector<text_area> from_output_tensor();
 
