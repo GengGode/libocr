@@ -4,8 +4,9 @@
 
 #ifndef LIBOCR_ONNX_H
 #define LIBOCR_ONNX_H
-
-#include "../utils/include.h"
+#include <opencv2/opencv.hpp>
+#include <onnxruntime_cxx_api.h>
+#include <windows.h>
 #include "../utils/utils.h"
 
 namespace libocr::onnx

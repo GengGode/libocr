@@ -5,7 +5,10 @@
 #ifndef LIBOCR_OCR_MANAGER_H
 #define LIBOCR_OCR_MANAGER_H
 
-#include "utils/include.h"
+#include <opencv2/opencv.hpp>
+#include <onnxruntime_cxx_api.h>
+#include <windows.h>
+
 namespace libocr
 {
     namespace onnx
