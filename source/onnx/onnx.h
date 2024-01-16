@@ -7,7 +7,6 @@
 #include <opencv2/opencv.hpp>
 #include <onnxruntime_cxx_api.h>
 #include <windows.h>
-#include "../utils/utils.h"
 
 namespace libocr::onnx
 {
@@ -31,13 +30,13 @@ namespace libocr::onnx
         }
         void get_output_name()
         {
-            auto output_name_t = utils::get_output_name(session.get());
+            auto output_name_t = get_output_name(session.get());
             output_name = new char[output_name_t.size() + 1];
             strcpy_s(output_name, output_name_t.size() + 1, output_name_t.c_str());
         }
         std::vector<int64_t> get_input_shape()
         {
-            return utils::get_input_shape(session.get());
+            return get_input_shape(session.get());
         }
 
     protected:
@@ -53,11 +52,12 @@ namespace libocr::onnx
             auto h_module = GetModuleHandle(NULL);
 #else
 #ifdef _UNICODE
-            auto h_module = GetModuleHandle(L"libocr.dll");
+            auto h_module = GetModuleHandle(L LIBOCR_NAME);
 #else
-            auto h_module = GetModuleHandle("libocr.dll");
+            auto h_module = GetModuleHandle(LIBOCR_NAME);
 #endif
 #endif
+
 #ifdef _UNICODE
             HRSRC h_res = FindResource(h_module, MAKEINTRESOURCE(idr), L"Onnx");
 #else
@@ -82,9 +82,9 @@ namespace libocr::onnx
             auto h_module = GetModuleHandle(NULL);
 #else
 #ifdef _UNICODE
-            auto h_module = GetModuleHandle(L"libocr.dll");
+            auto h_module = GetModuleHandle(L LIBOCR_NAME);
 #else
-            auto h_module = GetModuleHandle("libocr.dll");
+            auto h_module = GetModuleHandle(LIBOCR_NAME);
 #endif
 #endif
 #ifdef _UNICODE

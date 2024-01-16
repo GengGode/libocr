@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 3.21)
 project(libocr VERSION 0.2.0 LANGUAGES CXX)
 
+    # mabye you need proxy
+    # message(STATUS "ENV{ALL_PROXY}: $ENV{ALL_PROXY}")
+    # set(ENV{ALL_PROXY} "http://127.0.0.1:1080")
+
 #=======================================================================================================================
 # 设置dll输出目录
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
@@ -14,6 +18,14 @@ include(cmake/find_opencv.cmake)
 include(cmake/find_deps.cmake)
 set(opencv_dir "${CMAKE_SOURCE_DIR}/deps/opencv" CACHE STRING "opencv dir")
 set(onnxruntime_dir "${CMAKE_SOURCE_DIR}/deps/onnxruntime" CACHE STRING "onnxruntime dir")
+if(NOT EXISTS ${opencv_dir})
+    message(STATUS "opencv dir not found, auto download deps...")
+    find_opencv(opencv_dir)
+endif()
+if(NOT EXISTS ${onnxruntime_dir})
+    message(STATUS "onnxruntime dir not found, auto download deps...")
+    find_onnxruntime(onnxruntime_dir)
+endif()
 set(opencv_include_dir "${opencv_dir}/include")
 set(onnxruntime_include_dir "${onnxruntime_dir}/include")
 #=======================================================================================================================

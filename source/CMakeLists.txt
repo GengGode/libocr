@@ -21,11 +21,13 @@ source_group(TREE ${CMAKE_SOURCE_DIR} FILES ${source_files})
 list(APPEND source_files ${resource_files})
 
 target_include_directories(${BUILD_TARGET_NAME} PUBLIC ${include_dir})
+target_compile_definitions(${BUILD_TARGET_NAME} PRIVATE LIBOCR_EXPORTS)
+target_compile_definitions(${BUILD_TARGET_NAME} PRIVATE LIBOCR_NAME="${BUILD_TARGET_NAME}.dll")
 
 target_sources(${BUILD_TARGET_NAME} PUBLIC ${include_dir}/libocr/libocr.h PRIVATE ${source_files})
 
-target_include_directories(${BUILD_TARGET_NAME} PUBLIC ${opencv_INCLUDE_DIR} ${onnxruntime_INCLUDE_DIR})
-target_link_libraries(${BUILD_TARGET_NAME} PUBLIC ${opencv_LIBRARYS} ${onnxruntime_LIBRARYS})
+target_include_directories(${BUILD_TARGET_NAME} PRIVATE ${opencv_INCLUDE_DIR} ${onnxruntime_INCLUDE_DIR})
+target_link_libraries(${BUILD_TARGET_NAME} PRIVATE ${opencv_LIBRARYS} ${onnxruntime_LIBRARYS})
 
 # 编译完成后，install到install目录
 install(TARGETS ${BUILD_TARGET_NAME})
