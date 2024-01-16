@@ -1,11 +1,9 @@
 //
 // Created by GengG on 2022/11/9.
 //
-#ifdef USED_LIBOCOR_STATIC_LIB
-#define _LIB
-#endif
-#ifndef _LIB
-#ifdef LIBOCR_EXPORT
+
+#if defined(_WIN32) || defined(_WIN64)
+#ifdef LIBOCR_EXPORTS
 #define LIBOCR_API __declspec(dllexport)
 #else
 #define LIBOCR_API __declspec(dllimport)
@@ -19,12 +17,10 @@ extern "C"
 {
 #endif
     LIBOCR_API int ocr(const char *image_data, int image_data_size, char *result, int result_size);
-    LIBOCR_API int
-    ocr_image_data(int image_width, int image_height, const char *image_data, int image_data_size, char *result,
-                   int result_size);
-    LIBOCR_API int
-    ocr_image_data_rgba(int image_width, int image_height, const char *image_data, unsigned int row_pitch,
-                        char *result, int result_size);
+    LIBOCR_API int ocr_image_data(int image_width, int image_height, const char *image_data, int image_data_size, char *result,
+                                  int result_size);
+    LIBOCR_API int ocr_image_data_rgba(int image_width, int image_height, const char *image_data, unsigned int row_pitch,
+                                       char *result, int result_size);
     LIBOCR_API int ocr_file_data(const char *image_data, int image_data_size, char *result, int result_size);
     LIBOCR_API int ocr_file_path(const char *image_file, char *result, int result_size);
     // allocate memory
