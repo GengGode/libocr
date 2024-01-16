@@ -51,6 +51,6 @@ COMMAND ${CMAKE_COMMAND} -E copy_if_different
 #copy libocr.dll to test/bin/Release
 add_custom_command(TARGET example_dynamiclink_runtime POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        $<TARGET_FILE:libocr>
+        $<TARGET_FILE:${BUILD_TARGET_NAME}>
         $<TARGET_FILE_DIR:example_dynamiclink_runtime>
 )
