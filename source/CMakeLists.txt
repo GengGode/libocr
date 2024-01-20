@@ -31,3 +31,4 @@ target_link_libraries(${BUILD_TARGET_NAME} PRIVATE ${opencv_LIBRARYS} ${onnxrunt
 
 # 编译完成后，install到install目录
 install(TARGETS ${BUILD_TARGET_NAME})
+install(FILES ${include_dir}/libocr/libocr.h DESTINATION include/libocr)
