@@ -41,11 +41,7 @@ jobs:
 
     - name: Build
       # Build your program with the given configuration
-      run: msbuild ${{github.workspace}}/build/libocr.sln /m /p:Configuration=${{env.BUILD_TYPE}} /p:RuntimeLibrary=MultiThreaded
-
-    - name: Install
-      # Install your program to the GitHub Actions runner, so that it can be used in subsequent steps
-      run: msbuild ${{github.workspace}}/build/libocr.sln /m /p:Configuration=${{env.BUILD_TYPE}} /p:RuntimeLibrary=MultiThreaded /t:Install
+      run: cmake --build . --config ${{env.BUILD_TYPE}} --target install -- /m
         
     - name: Test
       working-directory: ${{github.workspace}}/build
