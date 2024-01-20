@@ -113,36 +113,39 @@ function(find_opencv opencv_dir_vaule)
             set(CMAKE_MAKE_PROGRAM "make")
         endif()
         message(STATUS "build opencv static library CMAKE_MAKE_PROGRAM: ${CMAKE_MAKE_PROGRAM}")
-        execute_process(COMMAND cmake -G "${CMAKE_MAKE_PROGRAM}" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${install_dir} -DBUILD_SHARED_LIBS=OFF 
-        -DBUILD_opencv_apps=OFF -DBUILD_opencv_aruco=OFF -DBUILD_opencv_bgsegm=OFF 
-        -DBUILD_opencv_bioinspired=OFF -DBUILD_opencv_calib3d=OFF -DBUILD_opencv_ccalib=OFF 
-        -DBUILD_opencv_core=ON -DBUILD_opencv_datasets=OFF -DBUILD_opencv_dnn=OFF 
-        -DBUILD_opencv_dnn_objdetect=OFF -DBUILD_opencv_dnn_superres=OFF -DBUILD_opencv_dpm=OFF 
-        -DBUILD_opencv_face=OFF -DBUILD_opencv_flann=OFF -DBUILD_opencv_features2d=OFF 
-        -DBUILD_opencv_fuzzy=OFF -DBUILD_opencv_gapi=OFF -DBUILD_opencv_hfs=OFF 
-        -DBUILD_opencv_highgui=OFF -DBUILD_opencv_imgcodecs=ON -DBUILD_opencv_imgproc=ON 
-        -DBUILD_opencv_intensity_transform=OFF -DBUILD_opencv_line_descriptor=OFF 
-        -DBUILD_opencv_mcc=OFF -DBUILD_opencv_ml=OFF -DBUILD_opencv_objdetect=OFF 
-        -DBUILD_opencv_optflow=OFF -DBUILD_opencv_phase_unwrapping=OFF 
-        -DBUILD_opencv_photo=OFF -DBUILD_opencv_plot=OFF -DBUILD_opencv_quality=OFF 
-        -DBUILD_opencv_rapid=OFF -DBUILD_opencv_reg=OFF -DBUILD_opencv_rgbd=OFF 
-        -DBUILD_opencv_saliency=OFF -DBUILD_opencv_shape=OFF -DBUILD_opencv_stereo=OFF 
-        -DBUILD_opencv_stitching=OFF -DBUILD_opencv_structured_light=OFF -DBUILD_opencv_superres=OFF 
-        -DBUILD_opencv_surface_matching=OFF -DBUILD_opencv_text=OFF -DBUILD_opencv_tracking=OFF 
-        -DBUILD_opencv_ts=OFF -DBUILD_opencv_video=OFF -DBUILD_opencv_videoio=OFF 
-        -DBUILD_opencv_videostab=OFF -DBUILD_opencv_world=OFF 
-        -DBUILD_opencv_wechat_qrcode=OFF -DBUILD_opencv_xfeatures2d=OFF -DBUILD_opencv_ximgproc=OFF 
-        -DBUILD_opencv_xobjdetect=OFF -DBUILD_opencv_xphoto=OFF -DBUILD_opencv_python_bindings_generator=OFF 
-        -DBUILD_opencv_python_tests=OFF -DBUILD_JAVA=OFF -DBUILD_opencv_java_bindings_generator=OFF 
-        -DBUILD_opencv_js=OFF -DBUILD_opencv_js_bindings_generator=OFF -DBUILD_opencv_objc_bindings_generator=OFF 
+        execute_process(COMMAND cmake -G "${CMAKE_MAKE_PROGRAM}" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${install_dir} -DBUILD_SHARED_LIBS=OFF
+        -DBUILD_opencv_apps=OFF 
+        -DBUILD_opencv_calib3d=OFF 
+        -DBUILD_opencv_dnn=OFF 
+        -DBUILD_opencv_features2d=OFF 
+        -DBUILD_opencv_flann=OFF 
+        -DBUILD_opencv_gapi=OFF 
+        -DBUILD_opencv_highgui=OFF 
+        -DBUILD_opencv_ml=OFF 
+        -DBUILD_opencv_photo=OFF 
+        -DBUILD_opencv_video=OFF 
+        -DBUILD_opencv_videoio=OFF 
+        -DBUILD_opencv_java_bindings_generator=OFF
+        -DBUILD_opencv_js_bindings_generator=OFF
+        -DBUILD_opencv_objc_bindings_generator=OFF
+        -DBUILD_opencv_python_bindings_generator=OFF
+        -DBUILD_opencv_python_tests=OFF
+        -DBUILD_opencv_core=ON
+        -DBUILD_opencv_imgcodecs=ON 
+        -DBUILD_opencv_imgproc=ON 
+        -DBUILD_opencv_world=OFF 
         -DBUILD_TESTS=OFF 
         -DBUILD_PERF_TESTS=OFF
         -DBUILD_EXAMPLES=OFF 
         -DBUILD_DOCS=OFF 
         -DBUILD_WITH_DEBUG_INFO=OFF 
-        -DWITH_ITT=OFF 
-        -DBUILD_ITT=OFF 
-        -Dccitt=OFF 
+        -DWITH_ITT=OFF -DBUILD_ITT=OFF -Dccitt=OFF 
+        -DWITH_VTK=OFF -DWITH_WIN32UI=OFF -DWITH_OPENCL=OFF -DWITH_ONNX=OFF
+        -DWITH_IPP=OFF 
+        -DWITH_IPP_IW=OFF 
+        -DCV_TRACE=OFF
+        -DWITH_FFMEPG=OFF -DWITH_GSTREAMER=OFF -DWITH_DIRECTX=OFF -DWITH_MSMF=OFF -DWITH_1394=OFF -DWITH_DSHOW=OFF
+
         -DBUILD_SHARED_LIBS=OFF 
         -DBUILD_WITH_STATIC_CRT=ON 
         -DCMAKE_POSITION_INDEPENDENT_CODE=ON 
