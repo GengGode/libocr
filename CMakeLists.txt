@@ -32,7 +32,7 @@ set(onnxruntime_include_dir "${onnxruntime_dir}/include")
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 #=======================================================================================================================
-set(BUILD_TARGET_NAME ocr CACHE STRING "Build target_name")
+set(BUILD_TARGET_NAME libocr CACHE STRING "Build target_name" FORCE)
 set(BUILD_SHARED_LIBS ON CACHE BOOL "Build shared libs" FORCE)
 set(BUILD_TEST OFF CACHE BOOL "Build test")
 #=======================================================================================================================
