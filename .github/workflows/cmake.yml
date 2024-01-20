@@ -41,4 +41,4 @@ jobs:
       with:
         # Artifact name
         name: libocr
-        path: ${{github.workspace}}/build/install
+        path: ${{github.workspace}}/build/install/*
