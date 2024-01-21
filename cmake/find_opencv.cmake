@@ -15,6 +15,11 @@ function(find_opencv opencv_dir_vaule)
         message(STATUS "download opencv")
         execute_process(COMMAND git clone --depth 1 https://github.com/opencv/opencv.git ${download_dir})
     endif()
+    # get opencv version
+    execute_process(COMMAND git describe --tags  WORKING_DIRECTORY ${download_dir} OUTPUT_VARIABLE opencv_version)
+    # split . to get major.minor.patch
+    string(REPLACE "." "" opencv_version_str ${opencv_version})
+    string(SUBSTRING ${opencv_version_str} 0 3 opencv_version_str)
 
     # set(BUILD_SHARED_LIBS OFF)
     # set(OPENCV_CONFIG_FILE_INCLUDE_DIR ${CMAKE_BINARY_DIR}/.deps/opencv_gen_include)
@@ -101,9 +106,8 @@ function(find_opencv opencv_dir_vaule)
     # # 设置安装位置
     # set(CMAKE_INSTALL_PREFIX ${install_dir})
     # FetchContent_MakeAvailable(opencv)
-
     # 手动cmake build到解压目录
-    if(NOT EXISTS ${install_dir}/lib/opencv_world490.lib AND NOT EXISTS ${install_dir}/x64/vc17/staticlib/OpenCVConfig.cmake)
+    if((NOT EXISTS ${install_dir}/lib/opencv_core${opencv_version_str}.lib AND NOT EXISTS ${install_dir}/lib/opencv_world${opencv_version_str}.lib ) AND NOT EXISTS ${install_dir}/x64/vc17/staticlib/OpenCVConfig.cmake)
         file(MAKE_DIRECTORY ${extract_file})
         set(opencv_build_dir ${extract_file}/build)
         file(MAKE_DIRECTORY ${opencv_build_dir})
