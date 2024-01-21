@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.21)
-project(libocr VERSION 0.2.0 LANGUAGES CXX)
+project(libocr)
 
     # mabye you need proxy
     # message(STATUS "ENV{ALL_PROXY}: $ENV{ALL_PROXY}")
@@ -28,6 +28,12 @@ if(NOT EXISTS ${onnxruntime_dir})
 endif()
 set(opencv_include_dir "${opencv_dir}/include")
 set(onnxruntime_include_dir "${onnxruntime_dir}/include")
+#=======================================================================================================================
+include(cmake/parse_version.cmake)
+auto_increment_version_file("resource/version_hash.hash" "resource/version.ver")
+parse_version_file("resource/version.ver")
+get_commit_hash(PROJECT_VERSION_HASH)
+get_git_branch(PROJECT_VERSION_BRANCH)
 #=======================================================================================================================
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)

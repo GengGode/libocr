@@ -6,8 +6,8 @@ set_target_properties(${BUILD_TARGET_NAME} PROPERTIES MSVC_RUNTIME_LIBRARY "Mult
 target_compile_options(${BUILD_TARGET_NAME} PRIVATE $<$<CXX_COMPILER_ID:MSVC>:/MP>)
 
 # rc文件
-set(version_rc_file "${CMAKE_BINARY_DIR}/resource.rc")
-configure_file("${CMAKE_SOURCE_DIR}/resource/resource.rc.in" "${version_rc_file}")
+set(version_rc_file "${CMAKE_BINARY_DIR}/resource_version.rc")
+configure_file("${CMAKE_SOURCE_DIR}/resource/resource_version.rc.in" "${version_rc_file}")
 set(model_rc_file "${CMAKE_SOURCE_DIR}/resource/resource_model.rc")
 list(APPEND resource_files "${version_rc_file}" "${model_rc_file}")
 
