@@ -13,7 +13,7 @@ function(find_opencv opencv_dir_vaule)
     # 手动clone到下载目录
     if(NOT EXISTS ${download_file})
         message(STATUS "download opencv")
-        execute_process(COMMAND git clone --depth 1 https://github.com/opencv/opencv.git ${download_dir})
+        execute_process(COMMAND git clone --branch 4.9.0 --depth 1 https://github.com/opencv/opencv.git ${download_dir})
     endif()
     # get opencv version
     execute_process(COMMAND git describe --tags  WORKING_DIRECTORY ${download_dir} OUTPUT_VARIABLE opencv_version)
