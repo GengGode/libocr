@@ -1,6 +1,6 @@
 // Microsoft Visual C++ generated resource script.
 //
-#include "../src/resource/resource.h"
+#include "../source/resource/resource.h"
 
 #define APSTUDIO_READONLY_SYMBOLS
 /////////////////////////////////////////////////////////////////////////////
@@ -59,7 +59,7 @@ IDR_ONNX_CHT_REC        Onnx                    "model_rec.onnx"
 // Txt
 //
 
-IDR_TXT_CHT_DICT        Txt                     "dict.txt"
+IDR_TXT_CHT_DICT        Txt                     "model_rec_dict.txt"
 
 #endif    // 中文(简体，中国) resources
 /////////////////////////////////////////////////////////////////////////////

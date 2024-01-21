@@ -26,7 +26,7 @@ int Test_File()
 
         char *result_buff = new char[1024];
         // int res= libocr::ocr_file_path(image_path.c_str(), result_buff, 1024);
-        int res = libocr::ocr_file_data(image_data.c_str(), image_data.size(), result_buff, 1024);
+        int res = ocr_file_data(image_data.c_str(), image_data.size(), result_buff, 1024);
         if (res == 0)
         {
             text = std::string(result_buff);

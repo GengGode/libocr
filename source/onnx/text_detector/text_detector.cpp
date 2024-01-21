@@ -9,7 +9,7 @@ libocr::onnx::text_detector::text_detector()
 {
     set_options();
     //===== this set model resource IDR ONNX MODEL =====
-    auto model = libocr::utils::from_resource_load_onnx(IDR_ONNX_DET);
+    auto model = onnx::from_resource_load_onnx(IDR_ONNX_DET);
     session = std::make_shared<Ort::Session>(env, model.data, model.data_length, session_options);
 
     init_model();
@@ -30,11 +30,12 @@ void libocr::onnx::text_detector::init_model()
     model_input_img_max_size = 1024;
 }
 
-std::vector<libocr::onnx::text_detector::text_area> libocr::onnx::text_detector::run(cv::Mat &input_image)
+std::vector<libocr::onnx::text_detector::text_area> libocr::onnx::text_detector::run(const cv::Mat &input_image)
 {
     // note(zyxeeker): 需要重置输出节点防止输入不同大小输时出错
-    if(output_tensor != nullptr) {
-        output_tensor = Ort::Value{ nullptr };
+    if (output_tensor != nullptr)
+    {
+        output_tensor = Ort::Value{nullptr};
     }
     to_input_tensor(input_image);
     Ort::RunOptions run_options = Ort::RunOptions{nullptr};
@@ -42,11 +43,11 @@ std::vector<libocr::onnx::text_detector::text_area> libocr::onnx::text_detector:
     return from_output_tensor();
 }
 
-void libocr::onnx::text_detector::to_input_tensor(cv::Mat &src)
+void libocr::onnx::text_detector::to_input_tensor(const cv::Mat &src)
 {
     const static auto align_to_32 = [](int value) -> int
     {
-        return ((value + 31) / 32 -1) * 32;
+        return ((value + 31) / 32 - 1) * 32;
     };
 
     scale_size_width = 1.0 * align_to_32(src.cols) / src.cols;
@@ -56,27 +57,27 @@ void libocr::onnx::text_detector::to_input_tensor(cv::Mat &src)
     cv::resize(src, input_img, cv::Size(), scale_size_width, scale_size_height);
 #ifndef normalize
     // set input shape
-     std::array<int64_t, 4> input_shape = {1, 3, input_img.rows, input_img.cols};
+    std::array<int64_t, 4> input_shape = {1, 3, input_img.rows, input_img.cols};
     // size as step
-     int input_step = input_img.rows * input_img.cols;
+    int input_step = input_img.rows * input_img.cols;
     // size as input_shape : 1,3,48,192
-     int input_size = 1 * 3 * input_step;
+    int input_size = 1 * 3 * input_step;
     // copy to vector<float>
-     std::vector<float> input_data(input_size);
+    std::vector<float> input_data(input_size);
     // resort input_data
-     std::vector<float> norms = {1.0 / 0.229 / 255.0, 1.0 / 0.224 / 255.0, 1.0 / 0.225 / 255.0};
-     std::vector<float> means = {0.485 * 255, 0.456 * 255, 0.406 * 255};
-     for (int k = 0; k < 3; k++)
+    std::vector<float> norms = {1.0 / 0.229 / 255.0, 1.0 / 0.224 / 255.0, 1.0 / 0.225 / 255.0};
+    std::vector<float> means = {0.485 * 255, 0.456 * 255, 0.406 * 255};
+    for (int k = 0; k < 3; k++)
     {
-         for (int i = 0; i < input_img.rows; i++)
-         {
-             for (int j = 0; j < input_img.cols; j++)
-             {
-                 float value = input_img.data[i * input_img.cols * 3 + j * 3 + k] * norms[k] - means[k] * norms[k];
-                 input_data[k * input_step + i * input_img.cols + j] = value;
-             }
-         }
-     }
+        for (int i = 0; i < input_img.rows; i++)
+        {
+            for (int j = 0; j < input_img.cols; j++)
+            {
+                float value = input_img.data[i * input_img.cols * 3 + j * 3 + k] * norms[k] - means[k] * norms[k];
+                input_data[k * input_step + i * input_img.cols + j] = value;
+            }
+        }
+    }
 #else
     // normalize input img : mat / [0.229, 0.224, 0.225] - [0.485, 0.456, 0.406]
     cv::Mat input_img_norm;

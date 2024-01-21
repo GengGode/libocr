@@ -5,7 +5,10 @@
 #ifndef LIBOCR_OCR_MANAGER_H
 #define LIBOCR_OCR_MANAGER_H
 
-#include "utils/include.h"
+#include <opencv2/opencv.hpp>
+#include <onnxruntime_cxx_api.h>
+#include <windows.h>
+
 namespace libocr
 {
     namespace onnx
@@ -24,8 +27,8 @@ namespace libocr
         static ocr_manager &get_instance();
         ~ocr_manager();
 
-        std::string detect_and_recognize(cv::Mat &image);
-        std::string recognize(cv::Mat &image);
+        std::string detect_and_recognize(const cv::Mat &image);
+        std::string recognize(const cv::Mat &image);
 
         int recognize(int image_width, int image_height, const char *image_data, int image_data_size, char *result, int result_size);
         int recognize(int image_width, int image_height, const char *image_data, unsigned int row_pitch, char *result, int result_size);

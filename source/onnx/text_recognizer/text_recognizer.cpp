@@ -9,10 +9,10 @@ libocr::onnx::text_recognizer::text_recognizer()
 {
     set_options();
     //===== this set model resource IDR ONNX MODEL =====
-    auto model = libocr::utils::from_resource_load_onnx(IDR_ONNX_CHT_REC);
+    auto model = onnx::from_resource_load_onnx(IDR_ONNX_CHT_REC);
     session = std::make_shared<Ort::Session>(env, model.data, model.data_length, session_options);
     //===== this set keys resource IDR Txt  =====
-    auto dict = libocr::utils::from_resource_load_det_txt(IDR_TXT_CHT_DICT);
+    auto dict = onnx::from_resource_load_det_txt(IDR_TXT_CHT_DICT);
     {
         auto dict_string = std::string((char *)dict.data, dict.data_length);
         std::istringstream in(dict_string);
@@ -45,11 +45,12 @@ void libocr::onnx::text_recognizer::init_model()
     model_input_img_height = static_cast<int>(get_input_shape()[2]) == -1 ? 48 : static_cast<int>(get_input_shape()[2]);
 }
 
-std::string libocr::onnx::text_recognizer::run(cv::Mat &input_image)
+std::string libocr::onnx::text_recognizer::run(const cv::Mat &input_image)
 {
     // note(zyxeeker): 需要重置输出节点防止输入不同大小输时出错
-    if(output_tensor != nullptr) {
-        output_tensor = Ort::Value{ nullptr };
+    if (output_tensor != nullptr)
+    {
+        output_tensor = Ort::Value{nullptr};
     }
     to_input_tensor(input_image);
     Ort::RunOptions run_options = Ort::RunOptions{nullptr};
@@ -57,7 +58,7 @@ std::string libocr::onnx::text_recognizer::run(cv::Mat &input_image)
     return from_output_tensor();
 }
 
-void libocr::onnx::text_recognizer::to_input_tensor(cv::Mat &src)
+void libocr::onnx::text_recognizer::to_input_tensor(const cv::Mat &src)
 {
     auto scale = model_input_img_height / (float)src.rows;
 
