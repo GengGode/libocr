@@ -16,9 +16,10 @@ jobs:
     # You can convert this to a matrix build if you need cross-platform coverage.
     # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
     runs-on: windows-latest
+    outputs:
+      version: ${{ steps.get_version.outputs._version }}
 
     steps:
-
     - name: Add MSBuild to PATH
       uses: microsoft/setup-msbuild@v1.0.2
       
@@ -41,9 +42,45 @@ jobs:
       # Install the project to the build/install directory
       run: cmake --install . --prefix install
 
+    - name: Get the Version
+      id: get_version
+      run: |
+        $version = (Get-Content -Path ${{github.workspace}}/resource/version.ver -TotalCount 1).Trim()
+        echo "dll version: $version"
+        echo "_version=$version" >> $env:GITHUB_OUTPUT
+
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v3.1.1
       with:
         # Artifact name
         name: libocr
         path: ${{github.workspace}}/build/install/*
+
+  release:
+    if: github.ref == 'refs/heads/master'
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+        
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        Version: ${{ needs.build.outputs.version }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ env.Version }}
+        release_name: libocr ${{ env.Version }}
+        draft: false
+        # 仅有master分支的才不是预发布
+        prerelease: ${{ startsWith(github.base_ref, 'master') == false }}
+
+    - name: Upload a Release Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        asset_name: libocr-${{ env.Version }}.zip
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ${{github.workspace}}/build/install/*
+        asset_content_type: application/x-msdownload
