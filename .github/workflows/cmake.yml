@@ -2,9 +2,9 @@ name: CMake
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "master", "dev", "dev-*" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "master", "dev" ]
 
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
@@ -49,18 +49,31 @@ jobs:
         echo "dll version: $version"
         echo "_version=$version" >> $env:GITHUB_OUTPUT
 
+    - name: Zip the Install Directory
+      uses: montudor/action-zip@v0.1.0
+      with:
+        args: -r -9 -y
+        files: ${{github.workspace}}/build/install/*
+        output: ${{github.workspace}}/build/libocr-${{ steps.get_version.outputs._version }}.zip
+
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v3.1.1
       with:
         # Artifact name
         name: libocr
-        path: ${{github.workspace}}/build/install/*
+        path: ${{github.workspace}}/build/libocr-${{ steps.get_version.outputs._version }}.zip
 
   release:
     if: github.ref == 'refs/heads/master'
     needs: build
     runs-on: ubuntu-latest
     steps:
+
+    - name: Download a Build Artifact
+      uses: actions/download-artifact@v2
+      with:
+        name: libocr
+        path: ${{github.workspace}}/build
         
     - name: Create Release
       id: create_release
@@ -82,5 +95,5 @@ jobs:
       with:
         asset_name: libocr-${{ env.Version }}.zip
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ${{github.workspace}}/build/install/*
+        asset_path: ${{github.workspace}}/build/libocr-${{ env.Version }}.zip
         asset_content_type: application/x-msdownload
