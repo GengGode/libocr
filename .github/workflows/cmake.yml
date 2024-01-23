@@ -50,11 +50,10 @@ jobs:
         echo "_version=$version" >> $env:GITHUB_OUTPUT
 
     - name: Zip the Install Directory
-      uses: montudor/action-zip@v0.1.0
-      with:
-        args: -r -9 -y
-        files: ${{github.workspace}}/build/install/*
-        output: ${{github.workspace}}/build/libocr-${{ steps.get_version.outputs._version }}.zip
+      run: |
+        $version = (Get-Content -Path ${{github.workspace}}/resource/version.ver -TotalCount 1).Trim()
+        echo "dll version: $version"
+        Compress-Archive -Path ${{github.workspace}}/build/install -DestinationPath ${{github.workspace}}/build/libocr-$version.zip
 
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v3.1.1
