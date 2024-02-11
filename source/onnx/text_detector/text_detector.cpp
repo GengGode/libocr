@@ -17,8 +17,8 @@ libocr::onnx::text_detector::text_detector()
 
 void libocr::onnx::text_detector::set_options()
 {
-    // session_options.SetInterOpNumThreads(1);
-    session_options.SetGraphOptimizationLevel(GraphOptimizationLevel::ORT_ENABLE_EXTENDED);
+    //session_options.SetInterOpNumThreads(1);
+    session_options.SetGraphOptimizationLevel(GraphOptimizationLevel::ORT_ENABLE_ALL);
 }
 
 void libocr::onnx::text_detector::init_model()

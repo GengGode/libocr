@@ -33,7 +33,7 @@ libocr::onnx::text_recognizer::text_recognizer()
 void libocr::onnx::text_recognizer::set_options()
 {
     // session_options.SetInterOpNumThreads(1);
-    session_options.SetGraphOptimizationLevel(GraphOptimizationLevel::ORT_ENABLE_EXTENDED);
+    session_options.SetGraphOptimizationLevel(GraphOptimizationLevel::ORT_ENABLE_ALL);
 }
 
 void libocr::onnx::text_recognizer::init_model()
