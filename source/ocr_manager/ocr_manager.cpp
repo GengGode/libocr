@@ -34,6 +34,7 @@ std::string libocr::ocr_manager::detect_and_recognize(const cv::Mat& image)
 
 std::string libocr::ocr_manager::recognize(const cv::Mat& image)
 {
+    auto r = text_det->run(image);
     return text_rec->run(image);
 }
 
@@ -90,7 +91,7 @@ int libocr::ocr_manager::recognize(const char* image_data, int image_data_size, 
     {
         return -2;
     }
-    std::string text = recognize(image);
+    std::string text = detect_and_recognize(image);
     if (text.size() > result_size)
     {
         return -1;

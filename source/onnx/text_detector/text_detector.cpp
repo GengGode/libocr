@@ -105,6 +105,83 @@ void libocr::onnx::text_detector::to_input_tensor(const cv::Mat& src)
     input_tensor = Ort::Value::CreateTensor<float>(memory_info, input_data.data(), input_size, input_shape.data(), input_shape.size());
 }
 
+std::vector<cv::Point2f> get_rotate_rect_points(const cv::RotatedRect& rect)
+{
+    std::vector<cv::Point2f> ret(4);
+    rect.points(ret.data());
+    return ret;
+}
+
+std::vector<cv::Point2f> getMinBoxes(const cv::RotatedRect& boxRect)
+{
+    std::vector<cv::Point2f> boxPoint = get_rotate_rect_points(boxRect);
+    std::sort(boxPoint.begin(), boxPoint.end(), [](const cv::Point2f& a, const cv::Point2f& b) { return a.y < b.y; });
+    int index1 = 1, index2 = 3, index3 = 2, index4 = 0;
+    if (boxPoint[1].y > boxPoint[0].y)
+    {
+        index1 = 0;
+        index4 = 1;
+    }
+    if (boxPoint[3].y > boxPoint[2].y)
+    {
+        index2 = 2;
+        index3 = 3;
+    }
+    std::vector<cv::Point2f> minBox(4);
+    minBox[0] = boxPoint[index1];
+    minBox[1] = boxPoint[index2];
+    minBox[2] = boxPoint[index3];
+    minBox[3] = boxPoint[index4];
+    return minBox;
+}
+
+float getContourArea(const std::vector<cv::Point2f>& box, float unClipRatio)
+{
+    size_t size = box.size();
+    float area = 0.0f;
+    float dist = 0.0f;
+    for (size_t i = 0; i < size; i++)
+    {
+        area += box[i].x * box[(i + 1) % size].y - box[i].y * box[(i + 1) % size].x;
+        dist += sqrtf((box[i].x - box[(i + 1) % size].x) * (box[i].x - box[(i + 1) % size].x) + (box[i].y - box[(i + 1) % size].y) * (box[i].y - box[(i + 1) % size].y));
+    }
+    area = fabs(float(area / 2.0));
+
+    return area * unClipRatio / dist;
+}
+
+#include "../../clipper.hpp"
+cv::RotatedRect unClip(std::vector<cv::Point2f> box, float unClipRatio)
+{
+    float distance = getContourArea(box, unClipRatio);
+
+    ClipperLib::ClipperOffset offset;
+    ClipperLib::Path p;
+    p << ClipperLib::IntPoint(int(box[0].x), int(box[0].y)) << ClipperLib::IntPoint(int(box[1].x), int(box[1].y)) << ClipperLib::IntPoint(int(box[2].x), int(box[2].y))
+      << ClipperLib::IntPoint(int(box[3].x), int(box[3].y));
+    offset.AddPath(p, ClipperLib::jtRound, ClipperLib::etClosedPolygon);
+
+    ClipperLib::Paths soln;
+    offset.Execute(soln, distance);
+    std::vector<cv::Point2f> points;
+
+    for (size_t j = 0; j < soln.size(); j++)
+    {
+        for (size_t i = 0; i < soln[soln.size() - 1].size(); i++)
+        {
+            points.emplace_back(static_cast<float>(soln[j][i].X), static_cast<float>(soln[j][i].Y));
+        }
+    }
+    cv::RotatedRect res;
+    if (points.empty())
+    {
+        res = cv::RotatedRect(cv::Point2f(0, 0), cv::Size2f(1, 1), 0);
+    }
+    else
+    {
+        res = cv::minAreaRect(points);
+    }
+    return res;
 }
 
 std::vector<libocr::onnx::text_detector::text_area> libocr::onnx::text_detector::from_output_tensor()
@@ -125,15 +202,23 @@ std::vector<libocr::onnx::text_detector::text_area> libocr::onnx::text_detector:
     // out image to uint8
     cv::normalize(output_img, output_img_norm, 0, 255, cv::NORM_MINMAX, CV_8UC1);
     cv::Mat output_img_bin = output_img_norm > 75;
+    // dilate
+    cv::Mat dilateElement = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(2, 2));
+    cv::dilate(output_img_bin, output_img_bin, dilateElement);
     // find contours
     std::vector<std::vector<cv::Point>> contours;
     std::vector<cv::Vec4i> hierarchy;
     cv::findContours(output_img_bin, contours, hierarchy, cv::RETR_LIST, cv::CHAIN_APPROX_SIMPLE);
     std::vector<text_area> text_areas;
+    if (contours.size() > 1000)
+        contours.resize(1000);
     for (auto& contour : contours)
     {
-        cv::Rect rect = cv::boundingRect(contour);
+        if (contour.size() < 2)
+            continue;
+
         cv::RotatedRect min_rect = cv::minAreaRect(contour);
+        std::vector<cv::Point2f> minBoxes = getMinBoxes(min_rect);
         // filter small area
         if (min_rect.size.width < 4 || min_rect.size.height < 4)
         {
@@ -142,6 +227,17 @@ std::vector<libocr::onnx::text_detector::text_area> libocr::onnx::text_detector:
         std::vector<cv::Point2f> points;
         min_rect.points(points);
         auto score = min_rect.size.area() / cv::contourArea(contour);
+
+        cv::RotatedRect clipRect = unClip(points, 1.6f);
+        if (clipRect.size.height < 1.001 && clipRect.size.width < 1.001)
+            continue;
+
+        points = getMinBoxes(clipRect);
+        auto max_border = (std::max)(clipRect.size.width, clipRect.size.height);
+        if (max_border < 5)
+            continue;
+
+        cv::Rect rect = cv::boundingRect(points);
         // filter score less than 0.5
         if (score < 0.5)
         {
@@ -157,6 +253,18 @@ std::vector<libocr::onnx::text_detector::text_area> libocr::onnx::text_detector:
 
         text_areas.push_back(area);
     }
+
+    // debug show
+    // cv::Mat output_img_color;
+    // cv::cvtColor(output_img_norm, output_img_color, cv::COLOR_GRAY2BGR);
+    // for (auto& area : text_areas)
+    //{
+    //    cv::rectangle(output_img_color, area.rect, cv::Scalar(0, 0, 255), 2);
+    //    for (size_t i = 0; i < area.points.size(); i++)
+    //    {
+    //        cv::line(output_img_color, area.points[i], area.points[(i + 1) % 4], cv::Scalar(0, 255, 0), 2);
+    //    }
+    //}
 
     return text_areas;
 }
