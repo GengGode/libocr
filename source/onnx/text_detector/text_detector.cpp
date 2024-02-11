@@ -45,13 +45,9 @@ std::vector<libocr::onnx::text_detector::text_area> libocr::onnx::text_detector:
 
 void libocr::onnx::text_detector::to_input_tensor(const cv::Mat &src)
 {
-    const static auto align_to_32 = [](int value) -> int
-    {
-        return ((value + 31) / 32 - 1) * 32;
-    };
-
-    scale_size_width = 1.0 * align_to_32(src.cols) / src.cols;
-    scale_size_height = 1.0 * align_to_32(src.rows) / src.rows;
+    const static auto align_to_32 = [](int value) -> double { return value < 32 ? 32 : ((value + 31) / 32 - 1) * 32; };
+    scale_size_width = 1.0 * align_to_32(src.cols) / (double)src.cols;
+    scale_size_height = 1.0 * align_to_32(src.rows) / (double)src.rows;
     // resize input img
     cv::Mat input_img;
     cv::resize(src, input_img, cv::Size(), scale_size_width, scale_size_height);
