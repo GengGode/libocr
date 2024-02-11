@@ -12,7 +12,7 @@ libocr::ocr_manager::ocr_manager()
     text_rec = new onnx::text_recognizer();
 }
 
-libocr::ocr_manager &libocr::ocr_manager::get_instance()
+libocr::ocr_manager& libocr::ocr_manager::get_instance()
 {
     static ocr_manager instance;
     return instance;
@@ -24,23 +24,22 @@ libocr::ocr_manager::~ocr_manager()
     delete text_rec;
 }
 
-std::string libocr::ocr_manager::detect_and_recognize(const cv::Mat &image)
+std::string libocr::ocr_manager::detect_and_recognize(const cv::Mat& image)
 {
     std::string texts;
-    for (auto &area : text_det->run(image))
+    for (auto& area : text_det->run(image))
         texts += recognize(image(area.rect));
     return texts;
 }
 
-std::string libocr::ocr_manager::recognize(const cv::Mat &image)
+std::string libocr::ocr_manager::recognize(const cv::Mat& image)
 {
     return text_rec->run(image);
 }
 
-int libocr::ocr_manager::recognize(int image_width, int image_height, const char *image_data, int image_data_size,
-                                   char *result, int result_size)
+int libocr::ocr_manager::recognize(int image_width, int image_height, const char* image_data, int image_data_size, char* result, int result_size)
 {
-    cv::Mat image = cv::Mat(image_height, image_width, CV_8UC3, (void *)image_data);
+    cv::Mat image = cv::Mat(image_height, image_width, CV_8UC3, (void*)image_data);
     if (image.empty())
     {
         return -1;
@@ -59,10 +58,9 @@ int libocr::ocr_manager::recognize(int image_width, int image_height, const char
     return 0;
 }
 
-int libocr::ocr_manager::recognize(int image_width, int image_height, const char *image_data, unsigned int row_pitch,
-                                   char *result, int result_size)
+int libocr::ocr_manager::recognize(int image_width, int image_height, const char* image_data, unsigned int row_pitch, char* result, int result_size)
 {
-    cv::Mat image = cv::Mat(image_height, image_width, CV_8UC4, (void *)image_data, row_pitch);
+    cv::Mat image = cv::Mat(image_height, image_width, CV_8UC4, (void*)image_data, row_pitch);
     cv::Mat dst;
     cv::cvtColor(image, dst, cv::COLOR_RGBA2RGB);
     if (image.empty())
@@ -79,9 +77,9 @@ int libocr::ocr_manager::recognize(int image_width, int image_height, const char
     return 0;
 }
 
-int libocr::ocr_manager::recognize(const char *image_data, int image_data_size, char *result, int result_size)
+int libocr::ocr_manager::recognize(const char* image_data, int image_data_size, char* result, int result_size)
 {
-    auto image_array = cv::Mat(1, image_data_size, CV_8UC1, (void *)image_data);
+    auto image_array = cv::Mat(1, image_data_size, CV_8UC1, (void*)image_data);
     cv::Mat image = cv::imdecode(image_array, cv::IMREAD_COLOR);
 
     if (image.empty())
@@ -103,7 +101,7 @@ int libocr::ocr_manager::recognize(const char *image_data, int image_data_size, 
     return 0;
 }
 
-int libocr::ocr_manager::recognize(const char *image_file, char *result, int result_size)
+int libocr::ocr_manager::recognize(const char* image_file, char* result, int result_size)
 {
     cv::Mat image = cv::imread(image_file, cv::IMREAD_COLOR);
     if (image.empty())

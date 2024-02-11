@@ -25,12 +25,12 @@ namespace libocr::onnx
             cv::Rect rect;
             double score;
         };
-        std::vector<text_area> run(const cv::Mat &input_image);
+        std::vector<text_area> run(const cv::Mat& input_image);
 
     private:
-        Ort::Value input_tensor{nullptr};
-        Ort::Value output_tensor{nullptr};
-        void to_input_tensor(const cv::Mat &src);
+        Ort::Value input_tensor{ nullptr };
+        Ort::Value output_tensor{ nullptr };
+        void to_input_tensor(const cv::Mat& src);
 
         std::vector<text_area> from_output_tensor();
 
@@ -39,5 +39,5 @@ namespace libocr::onnx
         double scale_size_width;
         double scale_size_height;
     };
-}
+} // namespace libocr::onnx
 #endif // LIBOCR_TEXT_DETECTOR_H

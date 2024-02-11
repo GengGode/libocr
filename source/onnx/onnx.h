@@ -4,8 +4,8 @@
 
 #ifndef LIBOCR_ONNX_H
 #define LIBOCR_ONNX_H
-#include <opencv2/opencv.hpp>
 #include <onnxruntime_cxx_api.h>
+#include <opencv2/opencv.hpp>
 #include <windows.h>
 
 namespace libocr::onnx
@@ -18,8 +18,8 @@ namespace libocr::onnx
         Ort::SessionOptions session_options = Ort::SessionOptions();
 
     public:
-        char *input_name;
-        char *output_name;
+        char* input_name;
+        char* output_name;
 
     public:
         void get_input_name()
@@ -34,15 +34,12 @@ namespace libocr::onnx
             output_name = new char[output_name_t.size() + 1];
             strcpy_s(output_name, output_name_t.size() + 1, output_name_t.c_str());
         }
-        std::vector<int64_t> get_input_shape()
-        {
-            return get_input_shape(session.get());
-        }
+        std::vector<int64_t> get_input_shape() { return get_input_shape(session.get()); }
 
     protected:
         struct res_data_ptr
         {
-            const void *data;
+            const void* data;
             size_t data_length;
         };
         res_data_ptr from_resource_load_onnx(int idr)
@@ -51,11 +48,11 @@ namespace libocr::onnx
 #ifdef _LIB
             auto h_module = GetModuleHandle(NULL);
 #else
-#ifdef _UNICODE
+    #ifdef _UNICODE
             auto h_module = GetModuleHandle(L LIBOCR_NAME);
-#else
+    #else
             auto h_module = GetModuleHandle(LIBOCR_NAME);
-#endif
+    #endif
 #endif
 
 #ifdef _UNICODE
@@ -72,7 +69,7 @@ namespace libocr::onnx
             DWORD dw_size = SizeofResource(h_module, h_res);
             LPVOID lp_data = LockResource(h_mem);
 
-            return {lp_data, dw_size};
+            return { lp_data, dw_size };
         }
 
         res_data_ptr from_resource_load_det_txt(int idr)
@@ -81,11 +78,11 @@ namespace libocr::onnx
 #ifdef _LIB
             auto h_module = GetModuleHandle(NULL);
 #else
-#ifdef _UNICODE
+    #ifdef _UNICODE
             auto h_module = GetModuleHandle(L LIBOCR_NAME);
-#else
+    #else
             auto h_module = GetModuleHandle(LIBOCR_NAME);
-#endif
+    #endif
 #endif
 #ifdef _UNICODE
             HRSRC h_res = FindResource(h_module, MAKEINTRESOURCE(idr), L"Txt");
@@ -101,11 +98,11 @@ namespace libocr::onnx
             DWORD dw_size = SizeofResource(h_module, h_res);
             LPVOID lp_data = LockResource(h_mem);
 
-            return {lp_data, dw_size};
+            return { lp_data, dw_size };
         }
 
     private:
-        std::string get_input_name(Ort::Session *session)
+        std::string get_input_name(Ort::Session* session)
         {
             size_t num_input_nodes = session->GetInputCount();
             if (num_input_nodes == 0)
@@ -124,7 +121,7 @@ namespace libocr::onnx
                 return input_name;
             }
         }
-        std::string get_output_name(Ort::Session *session)
+        std::string get_output_name(Ort::Session* session)
         {
             size_t num_output_nodes = session->GetOutputCount();
             if (num_output_nodes == 0)
@@ -143,7 +140,7 @@ namespace libocr::onnx
                 return output_name;
             }
         }
-        std::vector<int64_t> get_input_shape(Ort::Session *session)
+        std::vector<int64_t> get_input_shape(Ort::Session* session)
         {
             size_t num_input_nodes = session->GetInputCount();
             if (num_input_nodes == 0)
@@ -162,6 +159,6 @@ namespace libocr::onnx
             }
         }
     };
-}
+} // namespace libocr::onnx
 
 #endif // LIBOCR_ONNX_H

@@ -19,13 +19,13 @@ namespace libocr::onnx
 
         void init_model();
 
-        std::string run(const cv::Mat &input_image);
+        std::string run(const cv::Mat& input_image);
 
     private:
-        Ort::Value input_tensor{nullptr};
-        Ort::Value output_tensor{nullptr};
+        Ort::Value input_tensor{ nullptr };
+        Ort::Value output_tensor{ nullptr };
 
-        void to_input_tensor(const cv::Mat &src);
+        void to_input_tensor(const cv::Mat& src);
 
         std::string from_output_tensor();
 
@@ -43,9 +43,9 @@ namespace libocr::onnx
         }
     };
 
-    inline static std::string ocr_run(text_recognizer &text_rec, cv::Mat &image)
+    inline static std::string ocr_run(text_recognizer& text_rec, cv::Mat& image)
     {
         return text_rec.run(image);
     }
-}
+} // namespace libocr::onnx
 #endif // LIBOCR_TEXT_RECOGNIZER_H

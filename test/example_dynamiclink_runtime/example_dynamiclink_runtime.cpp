@@ -2,15 +2,15 @@
 // Created by YuSuiXian on 2023/6/17.
 //
 
-#include <iostream>
-#include <fstream>
-#include <chrono>
 #include <Windows.h>
+#include <chrono>
+#include <fstream>
+#include <iostream>
 
 // 全局libocr.dll句柄
 HINSTANCE g_hDll = NULL;
 
-typedef int (*OCR_FILE_DATA)(const char *image_data, int image_data_size, char *result, int result_size);
+typedef int (*OCR_FILE_DATA)(const char* image_data, int image_data_size, char* result, int result_size);
 OCR_FILE_DATA g_ocr_file_data = NULL;
 struct libocr
 {
@@ -34,7 +34,7 @@ struct libocr
         return 0;
     }
 
-    static int ocr_file_data(const char *image_data, int image_data_size, char *result, int result_size)
+    static int ocr_file_data(const char* image_data, int image_data_size, char* result, int result_size)
     {
         if (NULL == g_ocr_file_data)
         {
@@ -60,7 +60,7 @@ int Test_File()
     //=========================================================================
     {
         std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
-        char *result_buff = new char[1024];
+        char* result_buff = new char[1024];
         // int res= libocr::ocr_file_path(image_path.c_str(), result_buff, 1024);
         int res = libocr::ocr_file_data(image_data.c_str(), image_data.size(), result_buff, 1024);
         if (res == 0)
@@ -74,8 +74,7 @@ int Test_File()
         // libocr::free_char(result);
         delete[] result_buff;
         std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
-        std::cout << "time:" << std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count() << "ms"
-                  << std::endl;
+        std::cout << "time:" << std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count() << "ms" << std::endl;
     }
     //=========================================================================
     std::cout << text << std::endl;
@@ -93,10 +92,10 @@ int Test_File()
     return 0;
 }
 
-#include <windows.h>
 #include <psapi.h>
+#include <windows.h>
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
     libocr::load();
     system("chcp 65001");
@@ -133,8 +132,7 @@ int main(int argc, char *argv[])
             test_error++;
         }
         double mem_used = (mem_used_after - mem_used_before) / 1024.0 / 1024.0;
-        std::cout << "test_count:" << test_count << " test_error:" << test_error << " mem_used:" << mem_used
-                  << std::endl;
+        std::cout << "test_count:" << test_count << " test_error:" << test_error << " mem_used:" << mem_used << std::endl;
     }
     // std::cout << "test_count:" << test_count << " test_error:" << test_error << std::endl;
     return 0;

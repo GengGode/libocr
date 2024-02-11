@@ -14,7 +14,7 @@ libocr::onnx::text_recognizer::text_recognizer()
     //===== this set keys resource IDR Txt  =====
     auto dict = onnx::from_resource_load_det_txt(IDR_TXT_CHT_DICT);
     {
-        auto dict_string = std::string((char *)dict.data, dict.data_length);
+        auto dict_string = std::string((char*)dict.data, dict.data_length);
         std::istringstream in(dict_string);
         if (in)
         {
@@ -45,20 +45,20 @@ void libocr::onnx::text_recognizer::init_model()
     model_input_img_height = static_cast<int>(get_input_shape()[2]) == -1 ? 48 : static_cast<int>(get_input_shape()[2]);
 }
 
-std::string libocr::onnx::text_recognizer::run(const cv::Mat &input_image)
+std::string libocr::onnx::text_recognizer::run(const cv::Mat& input_image)
 {
     // note(zyxeeker): 需要重置输出节点防止输入不同大小输时出错
     if (output_tensor != nullptr)
     {
-        output_tensor = Ort::Value{nullptr};
+        output_tensor = Ort::Value{ nullptr };
     }
     to_input_tensor(input_image);
-    Ort::RunOptions run_options = Ort::RunOptions{nullptr};
+    Ort::RunOptions run_options = Ort::RunOptions{ nullptr };
     session->Run(run_options, &input_name, &input_tensor, 1, &output_name, &output_tensor, 1);
     return from_output_tensor();
 }
 
-void libocr::onnx::text_recognizer::to_input_tensor(const cv::Mat &src)
+void libocr::onnx::text_recognizer::to_input_tensor(const cv::Mat& src)
 {
     auto scale = model_input_img_height / (float)src.rows;
 
@@ -69,7 +69,7 @@ void libocr::onnx::text_recognizer::to_input_tensor(const cv::Mat &src)
     cv::Mat input_img_norm;
     input_img.convertTo(input_img_norm, CV_32FC3, 1.0 / 127.5, -1.0);
     // set input shape
-    std::array<int64_t, 4> input_shape = {1, 3, input_img.rows, input_img.cols};
+    std::array<int64_t, 4> input_shape = { 1, 3, input_img.rows, input_img.cols };
     // size as input_shape : 1,3,48,192
     int input_size = 1 * 3 * input_img.rows * input_img.cols;
     // copy to vector<float>
@@ -91,8 +91,7 @@ void libocr::onnx::text_recognizer::to_input_tensor(const cv::Mat &src)
     // memory input img
     auto memory_info = Ort::MemoryInfo::CreateCpu(OrtArenaAllocator, OrtMemTypeDefault);
     // create input tensor
-    input_tensor = Ort::Value::CreateTensor<float>(memory_info, input_data.data(), input_size, input_shape.data(),
-                                                   input_shape.size());
+    input_tensor = Ort::Value::CreateTensor<float>(memory_info, input_data.data(), input_size, input_shape.data(), input_shape.size());
 }
 
 std::string libocr::onnx::text_recognizer::from_output_tensor()
@@ -104,7 +103,7 @@ std::string libocr::onnx::text_recognizer::from_output_tensor()
     auto output_data_ptr = output_tensor.GetTensorMutableData<float>();
     std::vector<float> output_data(output_data_ptr, output_data_ptr + output_size);
     // re norm
-    for (auto &v : output_data)
+    for (auto& v : output_data)
     {
         v = exp(v);
     }
@@ -118,17 +117,17 @@ std::string libocr::onnx::text_recognizer::from_output_tensor()
     }
     // get max index, value
     std::vector<std::pair<int, float>> max_index_value;
-    for (auto &v : output_data_2d)
+    for (auto& v : output_data_2d)
     {
         auto max_index = static_cast<int>(std::max_element(v.begin(), v.end()) - v.begin());
         auto max_value = *std::max_element(v.begin(), v.end());
         max_index_value.push_back(std::make_pair(max_index, max_value));
     }
 
-    auto &result = output_data_2d;
+    auto& result = output_data_2d;
     std::string text_result = "";
     std::string last_word = "";
-    for (auto &v : result)
+    for (auto& v : result)
     {
         auto max_index = static_cast<int>(std::max_element(v.begin(), v.end()) - v.begin());
         // auto max_value = *std::max_element(v.begin(), v.end());

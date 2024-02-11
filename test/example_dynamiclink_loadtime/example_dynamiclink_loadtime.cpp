@@ -2,10 +2,10 @@
 // Created by YuSuiXian on 2023/6/17.
 //
 
-#include <iostream>
-#include <fstream>
-#include <chrono>
 #include <Windows.h>
+#include <chrono>
+#include <fstream>
+#include <iostream>
 #include <libocr/libocr.h>
 
 int Test_File()
@@ -24,7 +24,7 @@ int Test_File()
     {
         std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
 
-        char *result_buff = new char[1024];
+        char* result_buff = new char[1024];
         // int res= libocr::ocr_file_path(image_path.c_str(), result_buff, 1024);
         int res = ocr_file_data(image_data.c_str(), image_data.size(), result_buff, 1024);
         if (res == 0)
@@ -38,8 +38,7 @@ int Test_File()
         // libocr::free_char(result);
         delete[] result_buff;
         std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
-        std::cout << "time:" << std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count() << "ms"
-                  << std::endl;
+        std::cout << "time:" << std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count() << "ms" << std::endl;
     }
     //=========================================================================
     std::cout << text << std::endl;
@@ -57,10 +56,11 @@ int Test_File()
     return 0;
 }
 
-#include <windows.h>
 #include <psapi.h>
+#include <thread>
+#include <windows.h>
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
     system("chcp 65001");
     int test_cycle = 200;
@@ -96,8 +96,8 @@ int main(int argc, char *argv[])
             test_error++;
         }
         double mem_used = (mem_used_after - mem_used_before) / 1024.0 / 1024.0;
-        std::cout << "test_count:" << test_count << " test_error:" << test_error << " mem_used:" << mem_used
-                  << std::endl;
+        std::cout << "test_count:" << test_count << " test_error:" << test_error << " mem_used:" << mem_used << std::endl;
+
     }
     // std::cout << "test_count:" << test_count << " test_error:" << test_error << std::endl;
     return 0;
