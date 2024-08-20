@@ -66,6 +66,7 @@ find_static_library(onnxruntime ${onnxruntime_dir})
 # find_package(ONNXRuntime REQUIRED)
 find_package(OpenCV CONFIG REQUIRED)
 #=======================================================================================================================
+add_subdirectory(resource)
 add_subdirectory(source)
 if (BUILD_TEST)
     enable_testing()

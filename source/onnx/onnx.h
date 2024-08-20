@@ -8,6 +8,8 @@
 #include <opencv2/opencv.hpp>
 #include <windows.h>
 
+#include "embed_resource.h"
+
 namespace libocr::onnx
 {
     class onnx
@@ -42,6 +44,12 @@ namespace libocr::onnx
             const void* data;
             size_t data_length;
         };
+        res_data_ptr from_resource_load_file(std::string file_name)
+        {
+            auto res_data = libocr::from_resource_load_file(file_name);
+            return { res_data.data, res_data.size };
+        }
+
         res_data_ptr from_resource_load_onnx(int idr)
         {
             // Initialize session from Resource idr

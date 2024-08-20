@@ -30,6 +30,8 @@ target_link_libraries(${BUILD_TARGET_NAME} PRIVATE opencv_core opencv_imgcodecs 
 target_include_directories(${BUILD_TARGET_NAME} PRIVATE ${onnxruntime_INCLUDE_DIR})
 target_link_libraries(${BUILD_TARGET_NAME} PRIVATE ${onnxruntime_LIBRARYS})
 
+target_link_libraries(${BUILD_TARGET_NAME} PRIVATE ${BUILD_TARGET_NAME}::resource)
+
 # 编译完成后，install到install目录
 install(TARGETS ${BUILD_TARGET_NAME})
 install(FILES ${include_dir}/libocr/libocr.h DESTINATION include/libocr)
