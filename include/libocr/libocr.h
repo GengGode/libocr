@@ -1,12 +1,15 @@
 //
 // Created by GengG on 2022/11/9.
 //
-
+#ifdef _LIB
 #if defined(_WIN32) || defined(_WIN64)
     #ifdef LIBOCR_EXPORTS
         #define LIBOCR_API __declspec(dllexport)
     #else
         #define LIBOCR_API __declspec(dllimport)
+    #endif
+#else
+    #define LIBOCR_API
     #endif
 #else
     #define LIBOCR_API

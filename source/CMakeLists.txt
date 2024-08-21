@@ -1,4 +1,8 @@
+if (BUILD_SHARED_LIBS)
 add_library(${BUILD_TARGET_NAME} SHARED)
+else()
+add_library(${BUILD_TARGET_NAME} STATIC)
+endif()
 add_library(${BUILD_TARGET_NAME}::ocr ALIAS ${BUILD_TARGET_NAME})
 
 target_compile_options(${BUILD_TARGET_NAME} PRIVATE $<$<CXX_COMPILER_ID:MSVC>:/utf-8>)
@@ -23,6 +27,9 @@ list(APPEND source_files ${resource_files})
 target_include_directories(${BUILD_TARGET_NAME} PUBLIC ${include_dir})
 target_compile_definitions(${BUILD_TARGET_NAME} PRIVATE LIBOCR_EXPORTS)
 target_compile_definitions(${BUILD_TARGET_NAME} PRIVATE LIBOCR_NAME="${BUILD_TARGET_NAME}.dll")
+if (BUILD_SHARED_LIBS)
+    target_compile_definitions(${BUILD_TARGET_NAME} PRIVATE _LIB)
+endif()
 
 target_sources(${BUILD_TARGET_NAME} PUBLIC ${include_dir}/libocr/libocr.h PRIVATE ${source_files})
 

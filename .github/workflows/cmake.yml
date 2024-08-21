@@ -15,7 +15,13 @@ jobs:
     # The CMake configure and build commands are platform agnostic and should work equally well on Windows or Mac.
     # You can convert this to a matrix build if you need cross-platform coverage.
     # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
-    runs-on: windows-latest
+    runs-on:  windows-latest
+    strategy:
+      matrix:
+        shared_type: [ON, OFF]
+    env:
+      BUILD_SHARED_LIBS: ${{ matrix.shared_type }}
+
     outputs:
       version: ${{ steps.get_version.outputs._version }}
 
@@ -39,7 +45,7 @@ jobs:
         configurePreset: Release
 
     - name: build
-      run: cmake --build build --config ${{ env.BUILD_TYPE }}
+      run: cmake --build build --config ${{ env.BUILD_TYPE }} -DBUILD_SHARED_LIBS=${{ env.BUILD_SHARED_LIBS }}
         
     - name: Test
       working-directory: ${{github.workspace}}/build
