@@ -1,7 +1,7 @@
 set(resource_target_name ${BUILD_TARGET_NAME}_resource)
 add_library(${resource_target_name} STATIC)
 add_library(${BUILD_TARGET_NAME}::resource ALIAS ${resource_target_name})
-
+  
 target_compile_options(${resource_target_name} PRIVATE $<$<CXX_COMPILER_ID:MSVC>:/utf-8>)
 set_target_properties(${resource_target_name} PROPERTIES MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 target_compile_options(${resource_target_name} PRIVATE $<$<CXX_COMPILER_ID:MSVC>:/MP>)
@@ -49,6 +49,8 @@ target_compile_options(embed_utils PRIVATE $<$<CXX_COMPILER_ID:MSVC>:/MP>)
 target_compile_definitions(embed_utils PRIVATE list_of_resources=${list_of_resource_define})
 
 add_dependencies(${resource_target_name} embed_utils)
+
+set(ENABLE_LINKEDRESOURCE "static link embed" CACHE INTERNAL "static link embed")
 
 # 生成后事件
 add_custom_command(

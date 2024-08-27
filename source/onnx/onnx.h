@@ -49,7 +49,7 @@ namespace libocr::onnx
             auto res_data = libocr::from_resource_load_file(file_name);
             return { res_data.data, res_data.size };
         }
-
+#ifndef _LIB
         res_data_ptr from_resource_load_onnx(int idr)
         {
             // Initialize session from Resource idr
@@ -108,7 +108,7 @@ namespace libocr::onnx
 
             return { lp_data, dw_size };
         }
-
+#endif
     private:
         std::string get_input_name(Ort::Session* session)
         {

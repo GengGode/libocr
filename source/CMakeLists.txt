@@ -12,8 +12,11 @@ target_compile_options(${BUILD_TARGET_NAME} PRIVATE $<$<CXX_COMPILER_ID:MSVC>:/M
 # rc文件
 set(version_rc_file "${CMAKE_BINARY_DIR}/resource_version.rc")
 configure_file("${CMAKE_SOURCE_DIR}/resource/resource_version.rc.in" "${version_rc_file}")
-set(model_rc_file "${CMAKE_SOURCE_DIR}/resource/resource_model.rc")
-list(APPEND resource_files "${version_rc_file}" "${model_rc_file}")
+if (BUILD_SHARED_LIBS)
+    set(model_rc_file "${CMAKE_SOURCE_DIR}/resource/resource_model.rc")
+    list(APPEND resource_files "${version_rc_file}" "${model_rc_file}")
+    set(ENABLE_RC ON CACHE INTERNAL "embed rc file")
+endif()
 
 # cpp文件
 file(GLOB_RECURSE source_files "*.cpp" "*.h" "*.hpp" "*.c" "*.cc" "*.cxx" "*.hxx")
