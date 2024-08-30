@@ -8,7 +8,7 @@
 libocr::onnx::text_recognizer::text_recognizer()
 {
     set_options();
-    #ifdef _LIB
+    #if 0
     //===== this set model resource IDR ONNX MODEL =====
     auto model = onnx::from_resource_load_onnx(IDR_ONNX_CHT_REC);
     #else
@@ -17,13 +17,13 @@ libocr::onnx::text_recognizer::text_recognizer()
     #endif
     session = std::make_shared<Ort::Session>(env, model.data, model.data_length, session_options);
 
-#ifdef _LIB
+    #if 0
     //===== this set keys resource IDR Txt  =====
     auto dict = onnx::from_resource_load_det_txt(IDR_TXT_CHT_DICT);
-#else
+    #else
     //===== this set keys resource file Txt  =====
     auto dict = onnx::from_resource_load_file("model_rec_dict.txt");
-#endif
+    #endif
     {
         auto dict_string = std::string((char*)dict.data, dict.data_length);
         std::istringstream in(dict_string);

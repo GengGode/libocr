@@ -8,7 +8,7 @@
 libocr::onnx::text_detector::text_detector()
 {
     set_options();
-    #ifdef _LIB
+    #if 0
     //===== this set model resource IDR ONNX MODEL =====
     auto model = onnx::from_resource_load_onnx(IDR_ONNX_DET);
     #else
