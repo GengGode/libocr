@@ -39,7 +39,7 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 #=======================================================================================================================
 set(BUILD_TARGET_NAME libocr CACHE STRING "Build target_name" FORCE)
-set(BUILD_SHARED_LIBS ON CACHE BOOL "Build shared libs" FORCE)
+set(BUILD_SHARED_LIBS ON CACHE BOOL "Build shared libs")
 set(BUILD_TEST OFF CACHE BOOL "Build test")
 set(ENABLE_RC OFF CACHE BOOL "embed rc file")
 set(ENABLE_LINKEDRESOURCE "not embed file" CACHE STRING "embed file status")
