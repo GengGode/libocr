@@ -76,7 +76,7 @@ jobs:
       uses: actions/upload-artifact@v3.1.1
       with:
         # Artifact name
-        name: libocr
+        name: libocr-shared_${{ matrix.shared_type }}
         path: ${{github.workspace}}/build/libocr-${{ steps.get_version.outputs._version }}.zip
 
   release:
