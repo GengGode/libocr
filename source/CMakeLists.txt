@@ -38,4 +38,7 @@ target_link_libraries(${BUILD_TARGET_NAME} PRIVATE ${BUILD_TARGET_NAME}::resourc
 
 # 编译完成后，install到install目录
 install(TARGETS ${BUILD_TARGET_NAME})
+if (NOT BUILD_SHARED_LIBS)
+    install(TARGETS ${BUILD_TARGET_NAME}_resource)
+endif()
 install(FILES ${include_dir}/libocr/libocr.h DESTINATION include/libocr)
