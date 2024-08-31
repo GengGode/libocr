@@ -15,7 +15,13 @@ jobs:
     # The CMake configure and build commands are platform agnostic and should work equally well on Windows or Mac.
     # You can convert this to a matrix build if you need cross-platform coverage.
     # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
-    runs-on: windows-latest
+    runs-on:  windows-latest
+    strategy:
+      matrix:
+        shared_type: [ON, OFF]
+    env:
+      BUILD_SHARED_LIBS: ${{ matrix.shared_type }}
+
     outputs:
       version: ${{ steps.get_version.outputs._version }}
 
@@ -36,7 +42,8 @@ jobs:
     - name: run-cmake
       uses: lukka/run-cmake@v10
       with:
-        configurePreset: Release
+        configurePreset: ${{ env.BUILD_TYPE }}
+        configurePresetAdditionalArgs: "['-DBUILD_SHARED_LIBS=${{ env.BUILD_SHARED_LIBS }}', '-DBUILD_TESTING=ON']"
 
     - name: build
       run: cmake --build build --config ${{ env.BUILD_TYPE }}
@@ -69,7 +76,7 @@ jobs:
       uses: actions/upload-artifact@v3.1.1
       with:
         # Artifact name
-        name: libocr
+        name: libocr-shared_${{ matrix.shared_type }}
         path: ${{github.workspace}}/build/libocr-${{ steps.get_version.outputs._version }}.zip
 
   release:

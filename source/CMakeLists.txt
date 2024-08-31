@@ -1,4 +1,8 @@
+if (BUILD_SHARED_LIBS)
 add_library(${BUILD_TARGET_NAME} SHARED)
+else()
+add_library(${BUILD_TARGET_NAME} STATIC)
+endif()
 add_library(${BUILD_TARGET_NAME}::ocr ALIAS ${BUILD_TARGET_NAME})
 
 target_compile_options(${BUILD_TARGET_NAME} PRIVATE $<$<CXX_COMPILER_ID:MSVC>:/utf-8>)
@@ -8,8 +12,6 @@ target_compile_options(${BUILD_TARGET_NAME} PRIVATE $<$<CXX_COMPILER_ID:MSVC>:/M
 # rc文件
 set(version_rc_file "${CMAKE_BINARY_DIR}/resource_version.rc")
 configure_file("${CMAKE_SOURCE_DIR}/resource/resource_version.rc.in" "${version_rc_file}")
-set(model_rc_file "${CMAKE_SOURCE_DIR}/resource/resource_model.rc")
-list(APPEND resource_files "${version_rc_file}" "${model_rc_file}")
 
 # cpp文件
 file(GLOB_RECURSE source_files "*.cpp" "*.h" "*.hpp" "*.c" "*.cc" "*.cxx" "*.hxx")
@@ -22,7 +24,9 @@ list(APPEND source_files ${resource_files})
 
 target_include_directories(${BUILD_TARGET_NAME} PUBLIC ${include_dir})
 target_compile_definitions(${BUILD_TARGET_NAME} PRIVATE LIBOCR_EXPORTS)
-target_compile_definitions(${BUILD_TARGET_NAME} PRIVATE LIBOCR_NAME="${BUILD_TARGET_NAME}.dll")
+if (BUILD_SHARED_LIBS)
+    target_compile_definitions(${BUILD_TARGET_NAME} PRIVATE _LIB)
+endif()
 
 target_sources(${BUILD_TARGET_NAME} PUBLIC ${include_dir}/libocr/libocr.h PRIVATE ${source_files})
 
@@ -30,6 +34,11 @@ target_link_libraries(${BUILD_TARGET_NAME} PRIVATE opencv_core opencv_imgcodecs 
 target_include_directories(${BUILD_TARGET_NAME} PRIVATE ${onnxruntime_INCLUDE_DIR})
 target_link_libraries(${BUILD_TARGET_NAME} PRIVATE ${onnxruntime_LIBRARYS})
 
+target_link_libraries(${BUILD_TARGET_NAME} PRIVATE ${BUILD_TARGET_NAME}::resource)
+
 # 编译完成后，install到install目录
 install(TARGETS ${BUILD_TARGET_NAME})
+if (NOT BUILD_SHARED_LIBS)
+    install(TARGETS ${BUILD_TARGET_NAME}_resource)
+endif()
 install(FILES ${include_dir}/libocr/libocr.h DESTINATION include/libocr)

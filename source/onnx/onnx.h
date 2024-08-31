@@ -6,7 +6,8 @@
 #define LIBOCR_ONNX_H
 #include <onnxruntime_cxx_api.h>
 #include <opencv2/opencv.hpp>
-#include <windows.h>
+
+#include "embed_resource.h"
 
 namespace libocr::onnx
 {
@@ -42,65 +43,11 @@ namespace libocr::onnx
             const void* data;
             size_t data_length;
         };
-        res_data_ptr from_resource_load_onnx(int idr)
+        res_data_ptr from_resource_load_file(std::string file_name)
         {
-            // Initialize session from Resource idr
-#ifdef _LIB
-            auto h_module = GetModuleHandle(NULL);
-#else
-    #ifdef _UNICODE
-            auto h_module = GetModuleHandle(L LIBOCR_NAME);
-    #else
-            auto h_module = GetModuleHandle(LIBOCR_NAME);
-    #endif
-#endif
-
-#ifdef _UNICODE
-            HRSRC h_res = FindResource(h_module, MAKEINTRESOURCE(idr), L"Onnx");
-#else
-            HRSRC h_res = FindResource(h_module, MAKEINTRESOURCE(idr), "Onnx");
-#endif
-            if (h_res == 0)
-                return res_data_ptr();
-            HGLOBAL h_mem = LoadResource(h_module, h_res);
-            if (h_mem == 0)
-                return res_data_ptr();
-
-            DWORD dw_size = SizeofResource(h_module, h_res);
-            LPVOID lp_data = LockResource(h_mem);
-
-            return { lp_data, dw_size };
+            auto res_data = libocr::from_resource_load_file(file_name);
+            return { res_data.data, res_data.size };
         }
-
-        res_data_ptr from_resource_load_det_txt(int idr)
-        {
-            // Initialize txt from Resource idr
-#ifdef _LIB
-            auto h_module = GetModuleHandle(NULL);
-#else
-    #ifdef _UNICODE
-            auto h_module = GetModuleHandle(L LIBOCR_NAME);
-    #else
-            auto h_module = GetModuleHandle(LIBOCR_NAME);
-    #endif
-#endif
-#ifdef _UNICODE
-            HRSRC h_res = FindResource(h_module, MAKEINTRESOURCE(idr), L"Txt");
-#else
-            HRSRC h_res = FindResource(h_module, MAKEINTRESOURCE(idr), "Txt");
-#endif
-            if (h_res == 0)
-                return res_data_ptr();
-            HGLOBAL h_mem = LoadResource(h_module, h_res);
-            if (h_mem == 0)
-                return res_data_ptr();
-
-            DWORD dw_size = SizeofResource(h_module, h_res);
-            LPVOID lp_data = LockResource(h_mem);
-
-            return { lp_data, dw_size };
-        }
-
     private:
         std::string get_input_name(Ort::Session* session)
         {
